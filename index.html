@@ -13,12 +13,12 @@
 <meta name="application-name" content="柚子学习">
 <meta name="msapplication-TileColor" content="#4ECDC4">
 <meta name="msapplication-navbutton-color" content="#4ECDC4">
-<link rel="manifest" href="/youzi-study/manifest.json">
-<link rel="apple-touch-icon" href="/youzi-study/icons/icon-192x192.png">
-<link rel="apple-touch-icon" sizes="152x152" href="/youzi-study/icons/icon-152x152.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/youzi-study/icons/icon-192x192.png">
-<link rel="icon" type="image/png" sizes="192x192" href="/youzi-study/icons/icon-192x192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="/youzi-study/icons/icon-512x512.png">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-192x192.png">
+<link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-192x192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512x512.png">
 <style>
 :root {
   --primary: #FF6B9D;
@@ -1292,6 +1292,7 @@ body {
     <button class="tab-btn" data-tab="idiom">成语故事</button>
     <button class="tab-btn" data-tab="chars">认字写字</button>
     <button class="tab-btn" data-tab="pinyin">拼音练习</button>
+    <button class="tab-btn" data-tab="knowledge">通识辨析</button>
     <button class="tab-btn" data-tab="pen">控笔训练</button>
     <button class="tab-btn" data-tab="reading">绘本阅读</button>
   </div>
@@ -1347,6 +1348,14 @@ body {
     </div>
   </div>
 
+  <!-- 通识辨析 -->
+  <div class="tab-section" id="tab-knowledge">
+    <div class="card">
+      <div class="card-title"><span class="emoji">🌍</span> 通识辨析 — 生活中的大智慧<span class="section-badge">每日更新</span></div>
+      <div id="knowledge-box"></div>
+    </div>
+  </div>
+
   <!-- 控笔训练 -->
   <div class="tab-section" id="tab-pen">
     <div class="card">
@@ -1388,6 +1397,7 @@ body {
     <button class="tab-btn active" data-tab="calc">计算练习</button>
     <button class="tab-btn" data-tab="number-sense">数感星球</button>
     <button class="tab-btn" data-tab="thinking">思维练习</button>
+    <button class="tab-btn" data-tab="space">空间物理</button>
     <button class="tab-btn" data-tab="read-tip">读题标注</button>
     <button class="tab-btn" data-tab="wrong">错题本</button>
     <button class="tab-btn" data-tab="check">自我检查</button>
@@ -1413,6 +1423,14 @@ body {
         <p style="font-size:13px; color:#555; margin-bottom:12px;">🚀 去数感星球探索数学的奥秘吧！</p>
         <div id="number-sense-games"></div>
       </div>
+    </div>
+  </div>
+
+  <!-- 空间与物理启蒙 -->
+  <div class="tab-section" id="tab-space">
+    <div class="card">
+      <div class="card-title"><span class="emoji">🧭</span> 空间与物理启蒙<span class="section-badge">每日更新</span></div>
+      <div id="space-box"></div>
     </div>
   </div>
 
@@ -1876,6 +1894,45 @@ const enWords = [
   {en:'snow', cn:'雪', emoji:'❄️'}
 ];
 
+// 语文通识辨析库 — 生活中的大智慧
+const knowledgeData = [
+  {word:'路', similar:['道','街','巷','径'], question:'路、道、街、巷有什么不一样？', explain:'🛤️ **路**是最宽的，人和车都能走，比如"马路"\n🛣️ **道**更正式更大，比如"国道""铁道"\n🏘️ **街**两边有房子有商店，比如"大街""商业街"\n🛤️ **巷**又窄又小，两边是墙，比如"小巷""胡同"\n🥾 **径**是小小的路，比如"山径""小径"', story:'小明出门了。他先走出家门口的**小巷**，巷子很窄，两边都是高高的墙。走出巷子就到了**大街**，大街很宽，两边有好多商店。再往前走就上了大**马路**，汽车嗖嗖地跑。如果去郊外，走的又是弯弯曲曲的**山径**。路有宽有窄，名字不一样，意思也不一样哦！'},
+  {word:'近', similar:['远','旁边','靠近'], question:'近和远有什么区别？旁边和靠近又是什么意思？', explain:'📍 **近**就是距离短，走几步就到，比如"学校很近"\n📍 **远**就是距离长，要走很久，比如"北京很远"\n📍 **旁边**是在你身边左右，比如"小明在我旁边"\n📍 **靠近**是正在往那边走过去，比如"靠近一点看"', story:'小红的学校就在家**旁边**，走两步就到了，非常**近**。可是外婆家在乡下，坐车要两个小时才到，那就很**远**了。小红**靠近**窗户看外面的风景，发现隔壁的商店就在**旁边**。'},
+  {word:'大', similar:['小','巨','微'], question:'大、小、巨、微，这些词有什么不一样？', explain:'⭐ **大**比一般的大，比如"大苹果"\n⭐ **小**比一般的小，比如"小蚂蚁"\n⭐ **巨**超级超级大，比如"巨型恐龙""巨浪"\n⭐ **微**超级超级小，要放大镜才看得见，比如"微生物""微小"', story:'恐龙是**巨**大的动物，比大象还**大**好多好多。蚂蚁是**小**小的，可是细菌比蚂蚁还小，它**微**小到肉眼都看不见！大和小之间还有好多等级呢：小→较小→中→较大→大→巨大→巨型。'},
+  {word:'快', similar:['慢','急','稳'], question:'快、慢、急、稳分别是什么意思？', explain:'⚡ **快**是速度高，比如"跑得快"\n🐢 **慢**是速度低，比如"走得慢"\n🔥 **急**是着急、赶时间，比如"急急忙忙"\n🧘 **稳**是不慌不忙，稳稳当当，比如"稳稳地走"', story:'早上出门晚了，小红**急**急忙忙地往学校跑，跑得特别**快**。可是路上的老爷爷一步一步**稳稳**地走，虽然走得**慢**，但是不会摔倒。有时候慢一点反而更安全哦！'},
+  {word:'冷', similar:['热','凉','暖'], question:'冷、热、凉、暖，温度有这么多说法？', explain:'❄️ **冷**温度很低，要穿厚衣服，比如"冬天很冷"\n☀️ **热**温度很高，想吹空调，比如"夏天很热"\n🍃 **凉**不冷也不热，刚刚好，比如"秋天凉爽"\n🌸 **暖**微微热，很舒服，比如"春天的暖风"', story:'冬天外面**冷**得要命，小红裹着厚棉衣。进了屋子，暖气开着，一下子就**暖**了。春天来了，风吹过来**暖暖**的。到了秋天，天气变得**凉**爽。夏天太阳太**热**了，要吃冰淇淋！四季的温度变化真有趣。'},
+  {word:'上', similar:['下','左','右','前','后'], question:'上、下、左、右、前、后，方位词你都知道吗？', explain:'⬆️ **上**是高处，头在上面\n⬇️ **下**是低处，脚在下面\n⬅️ **左**是你的左手那边\n➡️ **右**是你的右手那边\n⏩ **前**是你面对的方向\n⏪ **后**是你背后的方向', story:'小红站在教室里。头顶**上**方是天花板，脚**下**是地板。窗户在她**左**边，门在她**右**边。黑板在**前**面，她的书包挂在**后**面的椅子上。记住：左手写字的小朋友左边就是左，右手写字的小朋友右边就是右！'},
+  {word:'新', similar:['旧','老','初'], question:'新、旧、老、初，时间让东西有了不同的名字？', explain:'✨ **新**刚刚做出来或刚买的，比如"新衣服"\n📜 **旧**用过一段时间了，比如"旧书"\n👴 **老**用了很久很久，也指年纪大，比如"老房子""老爷爷"\n🌱 **初**是开始、第一次，比如"初学""最初"', story:'妈妈给小红买了一件**新**衣服，她高兴极了。可是她最喜欢的那件**旧**外套，穿了两年了，虽然**老**了但还是很暖和。小红**初**学钢琴的时候手指都发酸，现在弹得可好了！'},
+  {word:'明', similar:['暗','亮','黑'], question:'明、暗、亮、黑，光的世界有多丰富？', explain:'💡 **明**有光线看得清楚，比如"天明了"\n🌑 **暗**光线少看不太清，比如"角落很暗"\n🌟 **亮**光很强很耀眼，比如"灯很亮"\n🖤 **黑**完全没有光，比如"黑夜"', story:'早上太阳出来了，天空**明**朗朗的，阳光很**亮**。到了傍晚天慢慢变**暗**，太阳落山后天就**黑**了。小明发现：有光的地方才能看清东西，光线多就是明，光线少就是暗，没有光就是黑！'},
+  {word:'城', similar:['乡','镇','村'], question:'城、乡、镇、村，住的地方有大有小？', explain:'🏙️ **城**（城市）最大最高楼最多，比如"北京城"\n🏘️ **镇**比城小但有商店学校，比如"小镇"\n🌾 **村**最小在田野里，比如"小村庄"\n🌿 **乡**是一片农村地区，有好几个村，比如"乡下"', story:'小红住在**城**里，楼很高，超市很大。外婆住在**乡**下的一个小**村**庄里，房子矮矮的，旁边就是稻田。去外婆家要先坐火车到**镇**上，再坐小巴到**村**里。城和乡虽然不一样，但各有各的好！'},
+  {word:'坐', similar:['站','躺','蹲'], question:'坐、站、躺、蹲，身体姿势有这么多？', explain:'🪑 **坐**屁股在椅子上，比如"坐在椅子上"\n🧍 **站**双脚踩地身体直直的，比如"站起来"\n🛏️ **躺**身体平放像睡觉一样，比如"躺在床上"\n🧎 **蹲**膝盖弯曲屁股靠近地面，比如"蹲下来看"', story:'上课的时候小红**坐**在椅子上。老师让回答问题时，她**站**起来。下课累了，在操场边**蹲**下来看蚂蚁搬家。回家后**躺**在床上看绘本。每种姿势都有不同的用处！'},
+  {word:'真', similar:['假','像','仿'], question:'真、假、像、仿，怎么区分真的和假的？', explain:'✅ **真**是本来就是这个样子，比如"真花""真事"\n❌ **假**是假装的或不是真的，比如"假花""假笑"\n🤔 **像**看起来差不多但不完全是，比如"像妈妈""好像下雨了"\n📋 **仿**是模仿学习，比如"仿写""仿造"', story:'小华在公园看到一朵**真**花，颜色鲜艳还有香味。回家看到桌上的**假**花，虽然**像**真花但是没有香味。小华在画画课上**仿**照老师画的苹果，画得也**像**真苹果一样！'},
+  {word:'高', similar:['低','矮','平'], question:'高、低、矮、平，高低世界怎么说？', explain:'⬆️ **高**向上很长很远，比如"高山""高楼"\n⬇️ **低**向下不怎么高，比如"低声""低头"\n🏠 **矮**比较短比较低，比如"矮房子""矮个子"\n➖ **平**没有高低变化，比如"平地""平路"', story:'小红站在**高**高的山顶上往下看，**低**处的房子好**矮**啊！山下的道路很**平**，车子跑得飞快。山顶的树又**高**又大。高处看得远，但爬上去可不容易！'},
+  {word:'硬', similar:['软','脆','韧'], question:'硬、软、脆、韧，摸起来感觉不一样？', explain:'🪨 **硬**按不动很结实，比如"石头很硬"\n🧸 **软**按下去会变形，比如"棉花很软"\n🍪 **脆**轻轻一掰就碎，比如"饼干很脆"\n🧶 **韧**弯曲了不会断，比如"绳子很韧"', story:'小红摸了摸桌子，好**硬**！再摸枕头，好**软**！吃饼干的时候"咔嚓"一声碎了，饼干很**脆**。拉橡皮筋，拉得长长也不会断，橡皮筋很**韧**。世界上每样东西摸起来都不一样！'},
+  {word:'开', similar:['关','闭','锁'], question:'开、关、闭、锁，门和窗的动作有什么区别？', explain:'🚪 **开**让东西打开可以从里面出去，比如"开门"\n🚪 **关**让东西合上挡住路，比如"关门"\n🔒 **闭**紧紧合上不让打开，比如"闭眼""闭嘴"\n🔐 **锁**用锁锁住打不开，比如"锁门"', story:'早上妈妈**开**门出去上班，晚上回来**关**门。睡觉前要把窗户**闭**上，怕冷风吹进来。出门的时候要把门**锁**好，这样陌生人进不来。开和关就像一对好朋友，一个打开一个合上。'},
+  {word:'轻', similar:['重','沉','飘'], question:'轻、重、沉、飘，东西有轻有重？', explain:'🪁 **轻**拿起来不费力，比如"羽毛很轻"\n🏋️ **重**拿起来很费力，比如"石头很重"\n⚓ **沉**放水里会往下掉，比如"铁块沉入水"\n🎈 **飘**在空中飞来飞去，比如"气球飘起来"', story:'小红吹了一个气球，气球**轻**轻的，**飘**在天空中。她捡了一块石头，石头好**重**啊！放进水里"咕咚"一下就**沉**下去了。木头就不一样，虽然有点重但放水里会浮起来，不会沉！'},
+  {word:'多', similar:['少','够','缺'], question:'多、少、够、缺，数量怎么分？', explain:'📈 **多**数量很大超过需要，比如"苹果太多了"\n📉 **少**数量很小不够分，比如"糖果太少了"\n✅ **够**数量正好不缺不多，比如"够吃了"\n❌ **缺**还差一些不够用，比如"缺一个人"', story:'妈妈买了一箱苹果，有20个！小红说："太**多**了！"可是只有3块糖果，哥哥说："太**少**了！"老师发铅笔，每人一支正好**够**了。做游戏的时候**缺**一个人，还差谁呢？'}
+];
+
+// 空间与物理启蒙库
+const spaceData = [
+  {title:'认识方位：上下左右', icon:'🧭', content:'我们的身体就是一个方位指南针！\n⬆️ **上**：头在上面，天花板在上面\n⬇️ **下**：脚在下面，地板在下面\n⬅️ **左**：吃饭拿碗的手那边是左\n➡️ **右**：写字画画的手那边是右\n\n👉 练一练：把铅笔放在桌子**上面**，把书包放在椅子**下面**，左手摸左耳朵，右手摸右耳朵！', activity:'🏠 家庭活动：让孩子站在房间中间，说出窗户在哪边（左/右），灯在哪边（上），地板在哪边（下）。然后转个身，看看左右变了吗？'},
+  {title:'认识前后远近', icon:'🗺️', content:'方向不只是上下左右，还有前后远近！\n⏩ **前**：你面对的方向就是前\n⏪ **后**：你背对的方向就是后\n📍 **近**：走几步就到的地方\n📍 **远**：要走很久的地方\n\n👉 练一练：站在门口，门**前**面是走廊，门**后**面是房间。学校**近**还是北京**远**？', activity:'🚶 家庭活动：和孩子面对面站着，问"你在我的前面还是后面？"然后一起转身，再问一次。让孩子体会"前"和"后"是跟面对的方向有关的！'},
+  {title:'认识形状：圆形方形三角形', icon:'🔷', content:'世界上的东西都有形状，最常见的三种是：\n⭕ **圆形**：没有角，滚起来很顺畅，比如球、车轮、盘子\n⬛ **方形**（正方形/长方形）：有4个直直的角，比如书本、窗户、电视\n🔺 **三角形**：有3个角3条边，比如屋顶、三角尺、小旗\n\n👉 找找看：你的家里有哪些东西是圆形的？哪些是方形的？哪些是三角形的？', activity:'🔍 家庭活动：让孩子在家里找出5个圆形的东西、5个方形的东西、3个三角形的东西。用手机拍照记录！'},
+  {title:'认识长度：长短高矮', icon:'📏', content:'东西有长有短，人也有高有矮。\n📏 **长**：从一头到另一头很远，比如长绳子\n📏 **短**：从一头到另一头很近，比如短铅笔\n⬆️ **高**：向上很长，比如高楼、大树\n⬇️ **矮**：向上很短，比如矮凳子、小草\n\n👉 练一练：比一比你的手指，哪个最长？哪个最短？你和爸爸谁高谁矮？', activity:'📏 家庭活动：用绳子量孩子的身高，再量爸爸的身高。谁高谁矮？再用绳子量桌子有多长，椅子有多短。让孩子理解"量"的概念。'},
+  {title:'认识重量：轻重', icon:'⚖️', content:'东西拿起来感觉不一样，有的轻有的重。\n🪁 **轻**：拿起来不费力，比如羽毛、棉花、气球\n🪨 **重**：拿起来很费力，比如石头、铁块、大象\n\n⚖️ 怎么比较轻重？\n- 用手掂一掂：两只手各拿一个东西感受一下\n- 用天平秤：重的一边往下沉\n- 放水里：重的沉下去，轻的浮上来\n\n👉 练一练：一块石头和一块木头哪个重？放水里试试！', activity:'⚖️ 家庭活动：准备一个气球和一块小石头，让孩子一手拿一个，感受轻重。然后在盆里放水，把石头和木头分别放进去，观察沉浮现象。'},
+  {title:'认识时间：快慢早晚', icon:'⏰', content:'时间有快有慢，一天有早有晚。\n⚡ **快**：很短的时间就做完了，比如"跑得快"\n🐢 **慢**：很长的时间才做完，比如"走得慢"\n🌅 **早**：一天的开始，太阳刚出来\n🌙 **晚**：一天的结束，太阳落山了\n\n⏰ 一天的时间顺序：早→中午→下午→晚\n\n👉 练一练：什么时候起床？（早上）什么时候睡觉？（晚上）跑步快还是走路快？', activity:'⏰ 家庭活动：让孩子观察一天的变化——早上太阳在哪？中午太阳在哪？晚上月亮出来了吗？用画笔把早中晚的天空画下来。'},
+  {title:'认识速度：谁快谁慢', icon:'🏎️', content:'速度就是"快慢的程度"。谁跑得快？谁跑得慢？\n🏎️ 赛车 → 特别快\n🚗 汽车 → 很快\n🚲 自行车 → 比走路快\n🚶 人走路 → 比较慢\n🐢 乌龟 → 特别慢\n\n💡 速度跟什么有关？\n- 跟距离有关：同样的时间，走的路越远越快\n- 跟时间有关：同样的路，用时越短越快\n\n👉 想一想：为什么汽车比自行车快？', activity:'🏃 家庭活动：在小区里做速度实验！让孩子走路走10米计时，再跑步跑10米计时。哪个快？快了多少秒？'},
+  {title:'认识温度：冷热凉暖', icon:'🌡️', content:'温度用数字表示，也有感觉上的名字。\n❄️ 0度以下 → **冰冻**，水会变成冰\n❄️ 0-10度 → **寒冷**，要穿棉衣\n🍃 10-20度 → **凉爽**，穿薄外套\n🌸 20-25度 → **温暖**，穿长袖\n☀️ 25-35度 → **炎热**，穿短袖\n🔥 35度以上 → **酷热**，要吹空调\n\n👉 练一练：今天多少度？你觉得是冷还是热？', activity:'🌡️ 家庭活动：让孩子摸冰箱里冰块的感觉（冷），摸暖气片的感觉（热），摸自来水的感觉（凉）。让孩子理解温度就是"冷热的程度"。'},
+  {title:'认识浮沉：为什么有的东西会浮起来', icon:'🚢', content:'把东西放水里，有的浮有的沉。\n⬆️ **浮**：木头、塑料瓶、气球 → 会浮在水上面\n⬇️ **沉**：铁钉、石头、硬币 → 会沉到水底下\n\n💡 为什么？\n- **轻的东西容易浮**：木头比水轻，所以浮\n- **重的东西容易沉**：铁比水重，所以沉\n- **形状也有关系**：铁碗虽然铁很重，但碗是空的，也能浮！\n\n👉 练一练：把一个空瓶子放水里，再装满水放水里，有什么不同？', activity:'🧪 家庭活动：准备一盆水，让孩子把以下东西分别放进去：木块、铁钉、塑料球、硬币、橘子、鸡蛋。观察哪些浮起来哪些沉下去，然后想想为什么。'},
+  {title:'认识平衡：为什么不倒', icon:'⚖️', content:'什么东西能站稳？什么东西会倒？\n⚖️ **平衡**就是两边重量一样，东西站得住\n\n💡 为什么椅子不会倒？\n- 椅子有4条腿，很稳\n- 花瓶底部大，站得稳\n- 陀螺转起来就不倒\n\n💡 为什么会倒？\n- 重的东西在上面，轻的在下面 → 容易倒\n- 底部太小 → 容易倒\n\n👉 练一练：把积木搭高，怎么搭才不容易倒？（底部要大要稳）', activity:'🏗️ 家庭活动：用积木搭塔——先搭底宽的，再搭底窄的，看看哪个更容易倒。然后在手指上平衡一支铅笔，找找铅笔的"平衡点"。'},
+  {title:'认识力：推和拉', icon:'💪', content:'力就是让东西动起来或停下来。\n👉 **推**：往外用力，比如推门、推车\n👈 **拉**：往自己这边用力，比如拉绳子、拉门\n⬆️ **举**：往上用力，比如举重\n⬇️ **压**：往下用力，比如按压\n\n💡 力的方向很重要：\n- 推车向前 → 车往前走\n- 拉绳向后 → 绳往回走\n\n👉 练一练：门是推开的还是拉开的？试试看！', activity:'💪 家庭活动：让孩子推一个重箱子，再拉一个重箱子。感受推和拉的不同。然后试试用手举起一本书（举）和用脚踩一个纸盒（压）。'},
+  {title:'认识声音：大小高低', icon:'🔔', content:'声音有大小有高低。\n📢 **大声**：雷声、汽车喇叭、喊叫\n whisper **小声**：蚊子嗡嗡、悄悄话、风吹树叶\n⬆️ **高音**：小鸟叫、口哨、钢琴右边\n⬇️ **低音**：鼓声、大提琴、牛叫\n\n💡 谁的声音最高？谁的声音最低？\n小鸟 → 高高的叽叽声\n大人 → 说话声中等\n鼓 → 低低的咚咚声\n\n👉 练一练：你能发出最高的声音吗？最低的声音吗？', activity:'🎵 家庭活动：用手机录下几种声音——拍桌子（大声）、撕纸（小声）、敲杯子（高音）、拍大腿（低音）。让孩子分辨哪些大哪些小，哪些高哪些低。'},
+  {title:'认识影子：为什么有影子', icon:'🌑', content:'影子是怎么来的？\n💡 **光**照在东西上，东西挡住了光，后面就出现了**影子**。\n\n影子的变化：\n- 早上太阳低 → 影子**长**\n- 中午太阳高 → 影子**短**\n- 下午太阳又低 → 影子又**长**\n\n👉 练一练：站在阳光下，看看你的影子在哪边？上午和下午影子的方向一样吗？', activity:'🌟 家庭活动：上午10点让孩子站在阳光下，用粉笔画出影子。中午12点再画一次。下午3点再画一次。看看影子怎么变化的！'},
+  {title:'认识重力：为什么东西会往下掉', icon:'⬇️', content:'为什么苹果会往下掉，不会往上飞？\n💡 因为地球有一种看不见的力叫**重力**，它把所有东西都往下拉。\n\n🌍 重力的秘密：\n- 水往低处流 → 因为重力\n- 东西掉地上 → 因为重力\n- 我们能站在地上 → 因为重力把我们拉住了\n- 如果没有重力 → 所有东西都会飘起来！\n\n👉 练一练：把一个球举高然后松手，球往哪边落？为什么？', activity:'🧪 家庭活动：准备球、纸、羽毛、硬币。站在床上把它们举高松手，观察谁落得快谁落得慢。重的落得快，轻的落得慢（但都会往下落！）'},
+  {title:'认识水的特性：流动和变化', icon:'💧', content:'水很神奇，它会变！\n💧 **液态水**：常温下的水，可以流动\n❄️ **冰**：0度以下，水变成了硬硬的冰\n☁️ **水蒸气**：很热的时候，水变成了看不见的气\n\n水的循环：冰→水→水蒸气→雨→水→冰\n\n👉 练一练：冰箱里的冰拿出来放碗里，会发生什么？', activity:'🧪 家庭活动：把冰块放在碗里观察它融化。然后在锅上烧水让孩子观察水蒸气（注意安全）。让孩子理解水可以变冰也可以变气。'}
+];
+
 // 锻炼项目
 const exercises = [
   {name:'跳绳', icon:'🤸', time:'15分钟', desc:'增强心肺功能'},
@@ -2077,6 +2134,57 @@ function renderPinyin() {
     </div>
   `).join('');
   document.getElementById('pinyin-exercise').innerHTML = exercises;
+}
+
+function renderKnowledge() {
+  const day = getDayOfYear();
+  const item = knowledgeData[day % knowledgeData.length];
+  
+  document.getElementById('knowledge-box').innerHTML = `
+    <div style="background:linear-gradient(135deg,#FFF8E1,#FFE0B2); border-radius:12px; padding:16px; margin-bottom:12px;">
+      <div style="font-size:22px; font-weight:700; color:#D84315; text-align:center; margin-bottom:8px;">
+        🌍 "${item.word}" 和它的朋友们
+      </div>
+      <div style="text-align:center; font-size:16px; margin-bottom:12px;">
+        ${item.similar.map(s => `<span style="background:#fff; padding:6px 14px; border-radius:10px; margin:4px; display:inline-block; font-weight:600; color:#E65100; border:2px solid #FFE0B2;">${s}</span>`).join('')}
+      </div>
+      <div style="font-size:15px; color:#333; margin-bottom:8px;">${item.question}</div>
+    </div>
+    <div style="background:#fff; border-radius:12px; padding:16px; margin-bottom:12px; font-size:14px; line-height:1.8;">
+      <div style="font-weight:700; color:#E65100; margin-bottom:8px;">💡 辨析：</div>
+      ${item.explain.replace(/\n/g,'<br>')}
+    </div>
+    <div style="background:linear-gradient(135deg,#E8F5E9,#C8E6C9); border-radius:12px; padding:16px; font-size:14px; line-height:2;">
+      <div style="font-weight:700; color:#2E7D32; margin-bottom:8px;">📖 小故事：</div>
+      ${item.story.replace(/\n/g,'<br>')}
+    </div>
+    <div style="background:linear-gradient(135deg,#E3F2FD,#BBDEFB); border-radius:12px; padding:16px; margin-top:12px; font-size:13px; line-height:1.8; color:#1565C0;">
+      <div style="font-weight:700; margin-bottom:6px;">${item.activity}</div>
+    </div>
+    <div style="text-align:center; margin-top:12px;">
+      <button class="btn btn-orange" onclick="speak('${item.word}和${item.similar.join("、")}的区别')">🔊 听辨析</button>
+    </div>
+  `;
+}
+
+function renderSpace() {
+  const day = getDayOfYear();
+  const item = spaceData[day % spaceData.length];
+  
+  document.getElementById('space-box').innerHTML = `
+    <div style="background:linear-gradient(135deg,#EDE7F6,#D1C4E9); border-radius:12px; padding:16px; margin-bottom:12px;">
+      <div style="font-size:20px; font-weight:700; color:#4A148C; text-align:center;">
+        ${item.icon} ${item.title}
+      </div>
+    </div>
+    <div style="background:#fff; border-radius:12px; padding:16px; font-size:14px; line-height:1.8; margin-bottom:12px;">
+      ${item.content.replace(/\n/g,'<br>')}
+    </div>
+    <div style="background:linear-gradient(135deg,#FFF3E0,#FFCC80); border-radius:12px; padding:16px; font-size:13px; line-height:1.8; color:#E65100;">
+      <div style="font-weight:700; margin-bottom:6px;">🧪 家庭实验：</div>
+      ${item.activity}
+    </div>
+  `;
 }
 
 function renderPenTraining() {
@@ -2922,6 +3030,8 @@ function init() {
   renderChars();
   renderPinyin();
   renderPenTraining();
+  renderKnowledge();
+  renderSpace();
   renderStory();
   generateMath();
   renderNumberSense();
