@@ -3,15 +3,13 @@
   "short_name": "柚子学习",
   "description": "幼小衔接学习App，涵盖语文、数学、英语、锻炼、拼音闯关游戏、打卡计划等",
   "start_url": "/youzi-study/index.html",
+  "scope": "/youzi-study/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#FFF5E1",
   "theme_color": "#4ECDC4",
   "lang": "zh-CN",
-  "categories": [
-    "education",
-    "kids"
-  ],
+  "categories": ["education", "kids"],
   "icons": [
     {
       "src": "/youzi-study/icons/icon-72x72.png",
@@ -58,6 +56,5 @@
     }
   ],
   "screenshots": [],
-  "prefer_related_applications": false,
-  "scope": "/youzi-study/"
+  "prefer_related_applications": false
 }

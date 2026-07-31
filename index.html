@@ -13,12 +13,12 @@
 <meta name="application-name" content="柚子学习">
 <meta name="msapplication-TileColor" content="#4ECDC4">
 <meta name="msapplication-navbutton-color" content="#4ECDC4">
-<link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icons/icon-192x192.png">
-<link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152x152.png">
-<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-192x192.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192x192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512x512.png">
+<link rel="manifest" href="/youzi-study/manifest.json">
+<link rel="apple-touch-icon" href="/youzi-study/icons/icon-192x192.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/youzi-study/icons/icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/youzi-study/icons/icon-192x192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/youzi-study/icons/icon-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/youzi-study/icons/icon-512x512.png">
 <style>
 :root {
   --primary: #FF6B9D;
@@ -248,10 +248,11 @@ body {
 }
 
 .poem-content {
-  font-size: 22px;
-  line-height: 2;
+  font-size: 24px;
+  line-height: 2.4;
   color: #333;
   font-family: 'STKaiti', 'KaiTi', serif;
+  font-weight: 600;
 }
 
 .poem-translation {
@@ -456,8 +457,8 @@ body {
 }
 
 .story-content {
-  font-size: 18px;
-  line-height: 2;
+  font-size: 20px;
+  line-height: 2.4;
   color: #444;
 }
 
@@ -2101,6 +2102,23 @@ const poems = [
   {title:'一去二三里', author:'邵雍', content:'一去二三里，\n烟村四五家。\n亭台六七座，\n八九十枝花。', translation:'走出去二三里路，看到四五户冒着炊烟的人家。有六七座亭台，还有八九十枝盛开的鲜花。'}
 ];
 
+const pinyinMap = {"一": "yī", "七": "qī", "万": "wàn", "三": "sān", "上": "shàng", "下": "xià", "不": "bù", "与": "yǔ", "世": "shì", "业": "yè", "东": "dōng", "丝": "sī", "丢": "diū", "两": "liǎng", "个": "gè", "中": "zhōng", "丰": "fēng", "为": "wèi", "主": "zhǔ", "举": "jǔ", "久": "jiǔ", "么": "me", "义": "yì", "之": "zhī", "乌": "wū", "乐": "lè", "乘": "chéng", "九": "jiǔ", "也": "yě", "习": "xí", "乡": "xiāng", "书": "shū", "买": "mǎi", "了": "le", "事": "shì", "二": "èr", "于": "yú", "云": "yún", "五": "wǔ", "井": "jǐng", "些": "xiē", "亡": "wáng", "享": "xiǎng", "京": "jīng", "亭": "tíng", "亮": "liàng", "亲": "qīn", "人": "rén", "什": "shén", "今": "jīn", "从": "cóng", "他": "tā", "仙": "xiān", "令": "lìng", "以": "yǐ", "们": "men", "件": "jiàn", "任": "rèn", "仿": "fǎng", "休": "xiū", "优": "yōu", "会": "huì", "伞": "sǎn", "伯": "bó", "伸": "shēn", "似": "shì", "但": "dàn", "位": "wèi", "低": "dī", "住": "zhù", "体": "tǐ", "余": "yú", "佛": "fú", "作": "zuò", "你": "nǐ", "使": "shǐ", "依": "yī", "侥": "jiǎo", "侧": "cè", "保": "bǎo", "信": "xìn", "修": "xiū", "倒": "dào", "候": "hòu", "借": "jiè", "假": "jiǎ", "做": "zuò", "停": "tíng", "偷": "tōu", "傍": "bàng", "傲": "ào", "傻": "shǎ", "像": "xiàng", "僧": "sēng", "儿": "ér", "元": "yuán", "充": "chōng", "先": "xiān", "光": "guāng", "兑": "duì", "兔": "tù", "入": "rù", "全": "quán", "八": "bā", "公": "gōng", "六": "liù", "共": "gòng", "关": "guān", "兴": "xīng", "其": "qí", "具": "jù", "养": "yǎng", "兽": "shòu", "内": "nèi", "册": "cè", "再": "zài", "冒": "mào", "写": "xiě", "农": "nóng", "冬": "dōng", "冰": "bīng", "决": "jué", "冷": "lěng", "冻": "dòng", "准": "zhǔn", "凉": "liáng", "减": "jiǎn", "凑": "còu", "几": "jǐ", "凭": "píng", "凳": "dèng", "出": "chū", "击": "jī", "函": "hán", "刀": "dāo", "分": "fēn", "切": "qiè", "划": "huà", "列": "liè", "刘": "liú", "刚": "gāng", "初": "chū", "删": "shān", "利": "lì", "别": "bié", "到": "dào", "制": "zhì", "刷": "shuā", "刺": "cì", "刻": "kè", "前": "qián", "剑": "jiàn", "剩": "shèng", "剪": "jiǎn", "力": "lì", "劝": "quàn", "办": "bàn", "功": "gōng", "加": "jiā", "务": "wù", "动": "dòng", "助": "zhù", "努": "nǔ", "励": "lì", "劳": "láo", "势": "shì", "勤": "qín", "包": "bāo", "化": "huà", "北": "běi", "区": "qū", "十": "shí", "千": "qiān", "升": "shēng", "午": "wǔ", "华": "huá", "协": "xié", "单": "dān", "卖": "mài", "南": "nán", "卡": "kǎ", "卧": "wò", "却": "què", "压": "yā", "厚": "hòu", "原": "yuán", "去": "qù", "县": "xiàn", "又": "yòu", "友": "yǒu", "双": "shuāng", "反": "fǎn", "发": "fā", "取": "qǔ", "受": "shòu", "变": "biàn", "口": "kǒu", "古": "gǔ", "句": "jù", "另": "lìng", "只": "zhǐ", "叫": "jiào", "叭": "bā", "可": "kě", "台": "tái", "右": "yòu", "叶": "yè", "号": "hào", "叼": "diāo", "叽": "jī", "吃": "chī", "各": "gè", "合": "hé", "同": "tóng", "名": "míng", "后": "hòu", "吏": "lì", "向": "xiàng", "吓": "xià", "吗": "ma", "君": "jūn", "否": "fǒu", "吧": "ba", "含": "hán", "听": "tīng", "启": "qǐ", "吴": "wú", "吹": "chuī", "呀": "ya", "告": "gào", "呢": "ne", "味": "wèi", "呼": "hū", "命": "mìng", "和": "hé", "咏": "yǒng", "咔": "kā", "咕": "gū", "咚": "dōng", "咬": "yǎo", "响": "xiǎng", "哥": "gē", "哦": "ó", "哨": "shào", "哪": "nǎ", "唬": "hǔ", "唱": "chàng", "商": "shāng", "啊": "a", "啦": "la", "啼": "tí", "喇": "lǎ", "喊": "hǎn", "喜": "xǐ", "喝": "hē", "喻": "yù", "嗖": "sōu", "嗡": "wēng", "嘴": "zuǐ", "器": "qì", "嚓": "cā", "四": "sì", "回": "huí", "因": "yīn", "园": "yuán", "困": "kùn", "国": "guó", "图": "tú", "圆": "yuán", "圈": "quān", "土": "tǔ", "在": "zài", "地": "dì", "场": "chǎng", "坊": "fāng", "坏": "huài", "坐": "zuò", "块": "kuài", "坚": "jiān", "垂": "chuí", "型": "xíng", "城": "chéng", "域": "yù", "堤": "dī", "塑": "sù", "塔": "tǎ", "塘": "táng", "填": "tián", "墙": "qiáng", "增": "zēng", "壁": "bì", "声": "shēng", "处": "chù", "备": "bèi", "复": "fù", "夏": "xià", "夕": "xī", "外": "wài", "多": "duō", "夜": "yè", "够": "gòu", "大": "dà", "天": "tiān", "太": "tài", "夫": "fū", "失": "shī", "头": "tóu", "夸": "kuā", "奇": "qí", "奋": "fèn", "奖": "jiǎng", "套": "tào", "奥": "ào", "奶": "nǎi", "她": "tā", "好": "hǎo", "如": "rú", "妆": "zhuāng", "妈": "mā", "始": "shǐ", "姐": "jiě", "姨": "yí", "姿": "zī", "威": "wēi", "娃": "wá", "婆": "pó", "嫌": "xián", "子": "zi", "字": "zì", "存": "cún", "孙": "sūn", "孟": "mèng", "季": "jì", "孤": "gū", "学": "xué", "孩": "hái", "它": "tā", "守": "shǒu", "安": "ān", "完": "wán", "宗": "zōng", "定": "dìng", "宝": "bǎo", "实": "shí", "室": "shì", "害": "hài", "家": "jiā", "容": "róng", "宽": "kuān", "宾": "bīn", "寂": "jì", "密": "mì", "富": "fù", "寒": "hán", "寓": "yù", "察": "chá", "寸": "cùn", "对": "duì", "寻": "xún", "导": "dǎo", "小": "xiǎo", "少": "shǎo", "尖": "jiān", "尝": "cháng", "就": "jiù", "尺": "chǐ", "尽": "jǐn", "尾": "wěi", "局": "jú", "屁": "pì", "层": "céng", "居": "jū", "屋": "wū", "屏": "píng", "山": "shān", "岁": "suì", "岛": "dǎo", "岭": "lǐng", "岸": "àn", "峰": "fēng", "川": "chuān", "工": "gōng", "左": "zuǒ", "巨": "jù", "差": "chà", "己": "jǐ", "已": "yǐ", "巴": "bā", "巷": "xiàng", "币": "bì", "市": "shì", "布": "bù", "师": "shī", "希": "xī", "帝": "dì", "带": "dài", "帮": "bāng", "常": "cháng", "帽": "mào", "幕": "mù", "干": "gàn", "平": "píng", "年": "nián", "幸": "xìng", "幼": "yòu", "庄": "zhuāng", "床": "chuáng", "序": "xù", "庐": "lú", "库": "kù", "应": "yīng", "底": "dǐ", "店": "diàn", "废": "fèi", "度": "dù", "座": "zuò", "庭": "tíng", "廊": "láng", "开": "kāi", "弃": "qì", "弄": "nòng", "式": "shì", "张": "zhāng", "弯": "wān", "弹": "dàn", "强": "qiáng", "归": "guī", "当": "dāng", "录": "lù", "形": "xíng", "影": "yǐng", "往": "wǎng", "径": "jìng", "待": "dài", "很": "hěn", "律": "lǜ", "得": "dé", "循": "xún", "微": "wēi", "心": "xīn", "志": "zhì", "忙": "máng", "快": "kuài", "念": "niàn", "忽": "hū", "怀": "huái", "态": "tài", "怎": "zěn", "怕": "pà", "思": "sī", "急": "jí", "性": "xìng", "总": "zǒng", "恐": "kǒng", "恒": "héng", "恢": "huī", "息": "xī", "悄": "qiāo", "您": "nín", "悯": "mǐn", "情": "qíng", "惊": "jīng", "惜": "xī", "惩": "chéng", "惯": "guàn", "想": "xiǎng", "意": "yì", "愚": "yú", "感": "gǎn", "愿": "yuàn", "慌": "huāng", "慢": "màn", "慧": "huì", "懂": "dǒng", "懈": "xiè", "戏": "xì", "成": "chéng", "我": "wǒ", "或": "huò", "戴": "dài", "户": "hù", "房": "fáng", "所": "suǒ", "手": "shǒu", "才": "cái", "打": "dǎ", "扣": "kòu", "扮": "bàn", "批": "pī", "找": "zhǎo", "把": "bǎ", "抓": "zhuā", "折": "zhé", "披": "pī", "抬": "tái", "拂": "fú", "拆": "chāi", "拉": "lā", "拍": "pāi", "拔": "bá", "拟": "nǐ", "拦": "lán", "拨": "bō", "择": "zé", "拼": "pīn", "拾": "shí", "拿": "ná", "持": "chí", "挂": "guà", "指": "zhǐ", "按": "àn", "挖": "wā", "挡": "dǎng", "挣": "zhēng", "振": "zhèn", "捂": "wǔ", "捉": "zhuō", "捕": "bǔ", "捞": "lāo", "损": "sǔn", "捡": "jiǎn", "换": "huàn", "据": "jù", "捺": "nà", "掂": "diān", "掉": "diào", "掌": "zhǎng", "排": "pái", "探": "tàn", "接": "jiē", "控": "kòng", "推": "tuī", "掩": "yǎn", "掰": "bāi", "描": "miáo", "提": "tí", "握": "wò", "搬": "bān", "搭": "dā", "摆": "bǎi", "摇": "yáo", "摔": "shuāi", "摸": "mō", "撇": "piē", "撑": "chēng", "撕": "sī", "撞": "zhuàng", "播": "bō", "撷": "xié", "操": "cāo", "支": "zhī", "收": "shōu", "改": "gǎi", "放": "fàng", "故": "gù", "救": "jiù", "教": "jiào", "敢": "gǎn", "散": "sàn", "数": "shù", "敲": "qiāo", "整": "zhěng", "文": "wén", "料": "liào", "断": "duàn", "新": "xīn", "方": "fāng", "旁": "páng", "旗": "qí", "无": "wú", "既": "jì", "日": "rì", "旧": "jiù", "早": "zǎo", "时": "shí", "旷": "kuàng", "明": "míng", "易": "yì", "星": "xīng", "映": "yìng", "春": "chūn", "昨": "zuó", "是": "shì", "显": "xiǎn", "晓": "xiǎo", "晖": "huī", "晚": "wǎn", "普": "pǔ", "景": "jǐng", "晰": "xī", "晴": "qíng", "智": "zhì", "暂": "zàn", "暖": "nuǎn", "暗": "àn", "曲": "qū", "更": "gèng", "最": "zuì", "月": "yuè", "有": "yǒu", "朋": "péng", "服": "fú", "朗": "lǎng", "望": "wàng", "期": "qī", "木": "mù", "未": "wèi", "本": "běn", "朵": "duǒ", "机": "jī", "李": "lǐ", "村": "cūn", "杜": "dù", "束": "shù", "条": "tiáo", "来": "lái", "杨": "yáng", "杯": "bēi", "杵": "chǔ", "松": "sōng", "板": "bǎn", "极": "jí", "析": "xī", "枕": "zhěn", "林": "lín", "枚": "méi", "果": "guǒ", "枝": "zhī", "枯": "kū", "染": "rǎn", "柔": "róu", "柚": "yòu", "查": "chá", "柳": "liǔ", "柴": "chái", "标": "biāo", "栏": "lán", "树": "shù", "校": "xiào", "株": "zhū", "样": "yàng", "根": "gēn", "格": "gé", "桂": "guì", "案": "àn", "桌": "zhuō", "桩": "zhuāng", "梦": "mèng", "检": "jiǎn", "棉": "mián", "棒": "bàng", "棵": "kē", "椅": "yǐ", "楚": "chǔ", "楼": "lóu", "概": "gài", "模": "mó", "横": "héng", "樾": "yuè", "橘": "jú", "橡": "xiàng", "檐": "yán", "次": "cì", "欢": "huān", "欲": "yù", "欸": "āi", "欺": "qī", "歇": "xiē", "歌": "gē", "止": "zhǐ", "正": "zhèng", "此": "cǐ", "步": "bù", "死": "sǐ", "段": "duàn", "毅": "yì", "母": "mǔ", "每": "měi", "比": "bǐ", "毕": "bì", "毛": "máo", "民": "mín", "气": "qì", "水": "shuǐ", "求": "qiú", "汉": "hàn", "汗": "hàn", "江": "jiāng", "池": "chí", "汽": "qì", "沉": "chén", "没": "méi", "河": "hé", "油": "yóu", "泉": "quán", "泊": "pō", "法": "fǎ", "波": "bō", "泥": "ní", "注": "zhù", "泳": "yǒng", "泼": "pō", "洒": "sǎ", "洗": "xǐ", "洞": "dòng", "活": "huó", "派": "pài", "流": "liú", "浅": "qiǎn", "浏": "liú", "浩": "hào", "浪": "làng", "浮": "fú", "海": "hǎi", "消": "xiāo", "涣": "huàn", "涧": "jiàn", "液": "yè", "淇": "qí", "淋": "lín", "深": "shēn", "淹": "yān", "添": "tiān", "清": "qīng", "渐": "jiàn", "温": "wēn", "渲": "xuàn", "渴": "kě", "游": "yóu", "溪": "xī", "滚": "gǔn", "满": "mǎn", "滴": "dī", "漏": "lòu", "演": "yǎn", "瀑": "pù", "火": "huǒ", "灭": "miè", "灯": "dēng", "灰": "huī", "炉": "lú", "炊": "chuī", "炎": "yán", "点": "diǎn", "炼": "liàn", "烈": "liè", "烟": "yān", "烧": "shāo", "热": "rè", "然": "rán", "照": "zhào", "燕": "yàn", "爬": "pá", "爱": "ài", "父": "fù", "爷": "yé", "爸": "bà", "爽": "shuǎng", "片": "piàn", "牙": "yá", "牛": "niú", "牢": "láo", "牧": "mù", "物": "wù", "特": "tè", "状": "zhuàng", "犹": "yóu", "狐": "hú", "狗": "gǒu", "独": "dú", "狮": "shī", "狸": "lí", "狼": "láng", "猫": "māo", "猴": "hóu", "率": "lǜ", "玉": "yù", "王": "wáng", "玩": "wán", "环": "huán", "现": "xiàn", "珍": "zhēn", "班": "bān", "球": "qiú", "理": "lǐ", "琨": "kūn", "琴": "qín", "瓶": "píng", "甜": "tián", "生": "shēng", "用": "yòng", "甩": "shuǎi", "甫": "fǔ", "田": "tián", "由": "yóu", "电": "diàn", "画": "huà", "畅": "chàng", "界": "jiè", "疑": "yí", "登": "dēng", "白": "bái", "百": "bǎi", "的": "de", "皆": "jiē", "皮": "pí", "盆": "pén", "盒": "hé", "盖": "gài", "盗": "dào", "盘": "pán", "盛": "shèng", "目": "mù", "直": "zhí", "相": "xiāng", "盾": "dùn", "看": "kàn", "真": "zhēn", "眠": "mián", "眼": "yǎn", "着": "zhe", "睛": "jīng", "睡": "shuì", "矛": "máo", "知": "zhī", "短": "duǎn", "矮": "ǎi", "石": "shí", "破": "pò", "硬": "yìng", "确": "què", "碎": "suì", "碗": "wǎn", "碧": "bì", "碰": "pèng", "磨": "mó", "示": "shì", "祖": "zǔ", "神": "shén", "祸": "huò", "福": "fú", "离": "lí", "禾": "hé", "秋": "qiū", "种": "zhǒng", "科": "kē", "秒": "miǎo", "秘": "mì", "秤": "chèng", "积": "jī", "称": "chēng", "移": "yí", "程": "chéng", "稍": "shāo", "稳": "wěn", "稻": "dào", "穷": "qióng", "空": "kōng", "穿": "chuān", "窄": "zhǎi", "窗": "chuāng", "窝": "wō", "立": "lì", "竖": "shù", "站": "zhàn", "章": "zhāng", "童": "tóng", "竹": "zhú", "竿": "gān", "笑": "xiào", "笔": "bǐ", "笠": "lì", "第": "dì", "等": "děng", "筋": "jīn", "答": "dá", "筝": "zhēng", "算": "suàn", "管": "guǎn", "箱": "xiāng", "米": "mǐ", "类": "lèi", "粉": "fěn", "粒": "lì", "粗": "cū", "粮": "liáng", "糕": "gāo", "糖": "táng", "糟": "zāo", "系": "xì", "索": "suǒ", "紧": "jǐn", "紫": "zǐ", "累": "lèi", "繁": "fán", "繇": "yáo", "红": "hóng", "级": "jí", "纪": "jì", "纸": "zhǐ", "线": "xiàn", "练": "liàn", "绅": "shēn", "细": "xì", "织": "zhī", "终": "zhōng", "经": "jīng", "结": "jié", "绘": "huì", "给": "gěi", "绝": "jué", "绢": "juàn", "绦": "tāo", "继": "jì", "续": "xù", "绳": "shéng", "维": "wéi", "绸": "chóu", "绿": "lǜ", "缓": "huǎn", "编": "biān", "缺": "quē", "罚": "fá", "置": "zhì", "羊": "yáng", "美": "měi", "群": "qún", "羽": "yǔ", "翁": "wēng", "翔": "xiáng", "翠": "cuì", "耀": "yào", "老": "lǎo", "者": "zhě", "而": "ér", "耍": "shuǎ", "耳": "ěr", "聪": "cōng", "肉": "ròu", "肚": "dù", "股": "gǔ", "肺": "fèi", "背": "bèi", "胜": "shèng", "胡": "hú", "胸": "xiōng", "能": "néng", "脆": "cuì", "脏": "zàng", "脑": "nǎo", "脖": "bó", "脚": "jiǎo", "脸": "liǎn", "腿": "tuǐ", "膝": "xī", "自": "zì", "至": "zhì", "致": "zhì", "舒": "shū", "舞": "wǔ", "舟": "zhōu", "航": "háng", "般": "bān", "船": "chuán", "艇": "tǐng", "色": "sè", "艳": "yàn", "花": "huā", "苔": "tái", "苗": "miáo", "苞": "bāo", "苦": "kǔ", "英": "yīng", "苹": "píng", "茂": "mào", "草": "cǎo", "荒": "huāng", "荡": "dàng", "荣": "róng", "荫": "yīn", "药": "yào", "荷": "hé", "莲": "lián", "获": "huò", "莺": "yīng", "菌": "jūn", "菜": "cài", "萍": "píng", "萎": "wēi", "落": "luò", "蒙": "méng", "蒸": "zhēng", "蓑": "suō", "蓝": "lán", "蔬": "shū", "蕉": "jiāo", "薄": "báo", "藏": "cáng", "虎": "hǔ", "虚": "xū", "虫": "chóng", "虽": "suī", "蚁": "yǐ", "蚂": "mǎ", "蚊": "wén", "蚪": "dǒu", "蛇": "shé", "蛋": "dàn", "蛙": "wā", "蜓": "tíng", "蜻": "qīng", "蝇": "yíng", "蝈": "guō", "蝉": "chán", "蝌": "kē", "蝴": "hú", "蝶": "dié", "融": "róng", "螺": "luó", "行": "xíng", "衔": "xián", "街": "jiē", "衡": "héng", "衣": "yī", "补": "bǔ", "表": "biǎo", "衫": "shān", "衬": "chèn", "袁": "yuán", "袋": "dài", "袖": "xiù", "被": "bèi", "裁": "cái", "装": "zhuāng", "裳": "shang", "裹": "guǒ", "西": "xī", "要": "yào", "见": "jiàn", "观": "guān", "规": "guī", "视": "shì", "览": "lǎn", "觉": "jué", "角": "jiǎo", "解": "jiě", "触": "chù", "言": "yán", "计": "jì", "认": "rèn", "让": "ràng", "训": "xùn", "记": "jì", "讶": "yà", "许": "xǔ", "设": "shè", "评": "píng", "识": "shí", "诉": "sù", "词": "cí", "试": "shì", "诗": "shī", "话": "huà", "该": "gāi", "语": "yǔ", "说": "shuō", "诵": "sòng", "请": "qǐng", "读": "dú", "课": "kè", "谁": "shuí", "调": "diào", "谦": "qiān", "豆": "dòu", "象": "xiàng", "豫": "yù", "贝": "bèi", "败": "bài", "质": "zhì", "费": "fèi", "贺": "hè", "贾": "jiǎ", "赛": "sài", "赢": "yíng", "走": "zǒu", "赶": "gǎn", "起": "qǐ", "趁": "chèn", "超": "chāo", "越": "yuè", "趣": "qù", "足": "zú", "跑": "pǎo", "距": "jù", "跟": "gēn", "路": "lù", "跳": "tiào", "踩": "cǎi", "踪": "zōng", "蹚": "tāng", "蹬": "dēng", "蹲": "dūn", "身": "shēn", "躺": "tǎng", "车": "chē", "转": "zhuǎn", "轮": "lún", "软": "ruǎn", "轻": "qīng", "较": "jiào", "输": "shū", "辛": "xīn", "辨": "biàn", "边": "biān", "辽": "liáo", "达": "dá", "过": "guò", "迎": "yíng", "运": "yùn", "近": "jìn", "返": "fǎn", "还": "hái", "这": "zhè", "进": "jìn", "远": "yuǎn", "迟": "chí", "迹": "jì", "追": "zhuī", "逃": "táo", "选": "xuǎn", "逐": "zhú", "逖": "tì", "通": "tōng", "速": "sù", "造": "zào", "逼": "bī", "遇": "yù", "遍": "biàn", "道": "dào", "遥": "yáo", "那": "nà", "邵": "shào", "邻": "lín", "郊": "jiāo", "部": "bù", "都": "dōu", "酒": "jiǔ", "酷": "kù", "酸": "suān", "酿": "niàng", "醉": "zuì", "醒": "xǐng", "采": "cǎi", "里": "lǐ", "重": "zhòng", "野": "yě", "量": "liàng", "针": "zhēn", "钉": "dīng", "钓": "diào", "钟": "zhōng", "钢": "gāng", "钩": "gōu", "钮": "niǔ", "钱": "qián", "铁": "tiě", "铃": "líng", "铅": "qiān", "铛": "dāng", "银": "yín", "锁": "suǒ", "锄": "chú", "锅": "guō", "错": "cuò", "键": "jiàn", "锻": "duàn", "镇": "zhèn", "镜": "jìng", "长": "zhǎng", "门": "mén", "闪": "shǎn", "闭": "bì", "问": "wèn", "闯": "chuǎng", "闲": "xián", "间": "jiān", "闻": "wén", "阅": "yuè", "阔": "kuò", "队": "duì", "防": "fáng", "阳": "yáng", "阴": "yīn", "阿": "ā", "陀": "tuó", "际": "jì", "陌": "mò", "除": "chú", "随": "suí", "隐": "yǐn", "隔": "gé", "难": "nán", "雀": "què", "集": "jí", "雍": "yōng", "雨": "yǔ", "雪": "xuě", "零": "líng", "雷": "léi", "雾": "wù", "需": "xū", "霜": "shuāng", "露": "lù", "青": "qīng", "静": "jìng", "非": "fēi", "靠": "kào", "面": "miàn", "鞋": "xié", "韧": "rèn", "音": "yīn", "页": "yè", "顶": "dǐng", "项": "xiàng", "顺": "shùn", "顾": "gù", "领": "lǐng", "颗": "kē", "题": "tí", "颜": "yán", "风": "fēng", "飘": "piāo", "飞": "fēi", "食": "shí", "餐": "cān", "饭": "fàn", "饱": "bǎo", "饼": "bǐng", "饿": "è", "首": "shǒu", "香": "xiāng", "马": "mǎ", "驮": "tuó", "骄": "jiāo", "骆": "luò", "验": "yàn", "骑": "qí", "高": "gāo", "鱼": "yú", "鲜": "xiān", "鲤": "lǐ", "鸟": "niǎo", "鸡": "jī", "鸢": "yuān", "鸣": "míng", "鸦": "yā", "鸭": "yā", "鹂": "lí", "鹅": "é", "鹭": "lù", "鹳": "guàn", "鹿": "lù", "麦": "mài", "黄": "huáng", "黑": "hēi", "鼎": "dǐng", "鼓": "gǔ", "鼠": "shǔ", "鼻": "bí", "龙": "lóng", "龟": "guī"};
+
+// 为文本添加拼音标注（ruby标签）
+function addPinyinToText(text) {
+  let result = '';
+  for (const ch of text) {
+    if (ch === '\n') {
+      result += '<br>';
+    } else if (pinyinMap[ch]) {
+      result += '<ruby>' + ch + '<rt>' + pinyinMap[ch] + '</rt></ruby>';
+    } else {
+      result += ch;
+    }
+  }
+  return result;
+}
+
 // 成语故事库
 const idioms = [
   {name:'守株待兔', story:'从前有个农夫，一天在田里干活，忽然一只兔子跑过来撞在树桩上死了。农夫没花力气就白捡了一只兔子，从此他不再种地，天天守在树桩旁等兔子来撞。可是再也没有兔子来了，他的田地也荒废了。', meaning:'比喻不主动努力，只想凭侥幸得到意外的收获。'},
@@ -2429,24 +2447,181 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 2000);
 }
 
+// 中文语音朗读 - 更清晰更慢
 function speak(text, rate) {
   if ('speechSynthesis' in window) {
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
     u.lang = 'zh-CN';
-    u.rate = rate || 0.8;
+    u.rate = rate || 0.65;
+    u.pitch = 1.05;
     speechSynthesis.speak(u);
   }
 }
 
+// 英语语音朗读 - 慢速+重复+优先选择优质语音
 function speakEn(text) {
+  if (!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  
+  // 尝试找到最好的英语语音
+  const voices = speechSynthesis.getVoices();
+  const enVoices = voices.filter(v => v.lang.startsWith('en'));
+  // 优先选 Google 或 Samantha 等高质量语音
+  const preferred = enVoices.find(v => v.name.includes('Google')) 
+                 || enVoices.find(v => v.name.includes('Samantha'))
+                 || enVoices.find(v => v.name.includes('Daniel'))
+                 || enVoices.find(v => v.lang === 'en-US')
+                 || enVoices[0];
+  
+  // 第一遍慢读
+  const u1 = new SpeechSynthesisUtterance(text);
+  u1.lang = preferred ? preferred.lang : 'en-US';
+  if (preferred) u1.voice = preferred;
+  u1.rate = 0.55;  // 非常慢，让孩子听清
+  u1.pitch = 1.0;
+  
+  // 第一遍结束后，0.5秒后第二遍正常速度
+  u1.onend = function() {
+    setTimeout(() => {
+      const u2 = new SpeechSynthesisUtterance(text);
+      u2.lang = preferred ? preferred.lang : 'en-US';
+      if (preferred) u2.voice = preferred;
+      u2.rate = 0.7;  // 稍快一点
+      u2.pitch = 1.0;
+      speechSynthesis.speak(u2);
+    }, 400);
+  };
+  
+  speechSynthesis.speak(u1);
+}
+
+// 英语单词朗读 - 逐字母拼写+整词读两遍
+function speakEnWord(word) {
+  if (!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  
+  const voices = speechSynthesis.getVoices();
+  const enVoices = voices.filter(v => v.lang.startsWith('en'));
+  const preferred = enVoices.find(v => v.name.includes('Google')) 
+                 || enVoices.find(v => v.name.includes('Samantha'))
+                 || enVoices.find(v => v.lang === 'en-US')
+                 || enVoices[0];
+  
+  // 先逐字母拼写
+  const letters = word.split('').join(', ');
+  const u0 = new SpeechSynthesisUtterance(letters);
+  u0.lang = 'en-US';
+  if (preferred) u0.voice = preferred;
+  u0.rate = 0.6;
+  
+  u0.onend = function() {
+    setTimeout(() => {
+      // 再读整词，慢速
+      const u1 = new SpeechSynthesisUtterance(word);
+      u1.lang = preferred ? preferred.lang : 'en-US';
+      if (preferred) u1.voice = preferred;
+      u1.rate = 0.5;
+      u1.onend = function() {
+        setTimeout(() => {
+          // 第二遍正常速度
+          const u2 = new SpeechSynthesisUtterance(word);
+          u2.lang = preferred ? preferred.lang : 'en-US';
+          if (preferred) u2.voice = preferred;
+          u2.rate = 0.75;
+          speechSynthesis.speak(u2);
+        }, 300);
+      };
+      speechSynthesis.speak(u1);
+    }, 300);
+  };
+  speechSynthesis.speak(u0);
+}
+
+// 逐字高亮朗读器 - 读一个字变一个字颜色
+let highlightTimer = null;
+
+function speakWithHighlight(containerId, text, rate) {
+  if (highlightTimer) {
+    clearTimeout(highlightTimer);
+  }
+  
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  
+  // 先停止其他朗读
+  if ('speechSynthesis' in window) speechSynthesis.cancel();
+  
+  // 把文字拆成单字span
+  const chars = text.split('');
+  container.innerHTML = chars.map((ch, i) => 
+    ch === '\n' ? '<br>' : `<span class="reading-char" data-idx="${i}" style="transition: color 0.3s, font-weight 0.3s; position:relative;">${ch}</span>`
+  ).join('');
+  
+  const charSpans = container.querySelectorAll('.reading-char');
+  let currentIdx = 0;
+  
+  // 用定时器逐字高亮
+  const charsPerSecond = (rate || 0.65) * 4.5;
+  const interval = 1000 / charsPerSecond;
+  
+  function highlightNext() {
+    // 上一个字变浅红（已读）
+    if (currentIdx > 0 && charSpans[currentIdx - 1]) {
+      charSpans[currentIdx - 1].style.color = '#E91E63';
+      charSpans[currentIdx - 1].style.fontWeight = '600';
+    }
+    // 当前字变红色加粗
+    if (currentIdx < charSpans.length) {
+      charSpans[currentIdx].style.color = '#FF0000';
+      charSpans[currentIdx].style.fontWeight = '700';
+      charSpans[currentIdx].style.textShadow = '0 0 8px rgba(255,0,0,0.4)';
+      currentIdx++;
+      highlightTimer = setTimeout(highlightNext, interval);
+    } else {
+      // 朗读完毕，恢复颜色
+      setTimeout(() => {
+        charSpans.forEach(s => {
+          s.style.color = '';
+          s.style.fontWeight = '';
+          s.style.textShadow = '';
+        });
+      }, 1500);
+    }
+  }
+  
+  // 同时用语音合成朗读
   if ('speechSynthesis' in window) {
-    speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'en-US';
-    u.rate = 0.8;
+    const u = new SpeechSynthesisUtterance(text.replace(/\n/g, ' '));
+    u.lang = 'zh-CN';
+    u.rate = rate || 0.65;
+    u.pitch = 1.05;
+    u.onend = function() {
+      clearTimeout(highlightTimer);
+      // 恢复所有字颜色
+      charSpans.forEach(s => {
+        s.style.color = '';
+        s.style.fontWeight = '';
+        s.style.textShadow = '';
+      });
+    };
     speechSynthesis.speak(u);
   }
+  
+  // 启动高亮定时器
+  highlightNext();
+}
+
+// 拼音朗读 - 先读拼音再读字
+function speakPinyin(py, word) {
+  speak(py, 0.45);
+  setTimeout(() => speak(word, 0.55), 1200);
+}
+
+// 停止所有朗读
+function stopAllSpeak() {
+  if ('speechSynthesis' in window) speechSynthesis.cancel();
+  if (highlightTimer) clearTimeout(highlightTimer);
 }
 
 // ============ 页面切换 ============
@@ -2478,20 +2653,33 @@ document.querySelectorAll('.tab-bar').forEach(bar => {
 
 // ============ 语文模块 ============
 
+let poemPinyinOn = false;
+
 function renderPoem() {
   const day = getDayOfYear();
   const poem = poems[day % poems.length];
+  const contentHtml = poemPinyinOn ? addPinyinToText(poem.content) : poem.content.replace(/\n/g, '<br>');
+  const titleHtml = poemPinyinOn ? addPinyinToText(poem.title) : poem.title;
   document.getElementById('poem-box').innerHTML = `
-    <div class="poem-title">${poem.title}</div>
+    <div class="poem-title" id="poem-title-area">${titleHtml}</div>
     <div class="poem-author">— ${poem.author}</div>
-    <div class="poem-content">${poem.content.replace(/\n/g, '<br>')}</div>
+    <div class="poem-content" id="poem-content-area">${contentHtml}</div>
     <div class="poem-translation">📖 ${poem.translation}</div>
+    <div style="text-align:center; margin-top:12px; display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
+      <button class="btn btn-purple" onclick="speakPoem()">🔊 逐字朗读</button>
+      <button class="btn btn-orange btn-sm" onclick="togglePoemPinyin()">${poemPinyinOn ? '🔤 隐藏拼音' : '🔤 显示拼音'}</button>
+    </div>
   `;
+}
+
+function togglePoemPinyin() {
+  poemPinyinOn = !poemPinyinOn;
+  renderPoem();
 }
 
 function speakPoem() {
   const poem = poems[getDayOfYear() % poems.length];
-  speak(`${poem.title}，${poem.author}。${poem.content.replace(/\n/g, '。')}`, 0.7);
+  speakWithHighlight('poem-content-area', poem.content, 0.55);
 }
 
 function recordPoemDone() {
@@ -2499,14 +2687,28 @@ function recordPoemDone() {
   completeTask('古诗背诵');
 }
 
+let idiomPinyinOn = false;
+
 function renderIdiom() {
   const day = getDayOfYear();
   const idiom = idioms[day % idioms.length];
+  const storyHtml = idiomPinyinOn ? addPinyinToText(idiom.story) : idiom.story.replace(/\n/g,'<br>');
+  const idiomNameHtml = idiomPinyinOn ? addPinyinToText(idiom.name) : idiom.name;
   document.getElementById('idiom-box').innerHTML = `
-    <div class="idiom-name">${idiom.name}</div>
-    <div class="idiom-story">${idiom.story}</div>
+    <div class="idiom-name" id="idiom-name-area" style="font-size:24px;">${idiomNameHtml}</div>
+    <div class="idiom-story" id="idiom-story-area" style="font-size:17px; line-height:2.8;">${storyHtml}</div>
     <div class="idiom-meaning">💡 <strong>寓意：</strong>${idiom.meaning}</div>
+    <div style="text-align:center; margin-top:12px; display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
+      <button class="btn btn-purple" onclick="speakWithHighlight('idiom-story-area', idioms[getDayOfYear() % idioms.length].story, 0.65)">🔊 逐字朗读故事</button>
+      <button class="btn btn-orange btn-sm" onclick="toggleIdiomPinyin()"> ${idiomPinyinOn ? '🔤 隐藏拼音' : '🔤 显示拼音'}</button>
+      <button class="btn btn-secondary btn-sm" onclick="speak('${idiom.name}')">🔊 读成语</button>
+    </div>
   `;
+}
+
+function toggleIdiomPinyin() {
+  idiomPinyinOn = !idiomPinyinOn;
+  renderIdiom();
 }
 
 function renderChars() {
@@ -2531,16 +2733,16 @@ function renderChars() {
 
   document.getElementById('new-chars').innerHTML = newChars.map(c => `
     <div class="char-card" onclick="speak('${c.ch}'); showCharInfo('${c.ch}','${c.py}','${c.meaning}')">
-      <div class="big-char">${c.ch}</div>
-      <div class="pinyin">${c.py}</div>
-      <div class="stroke">${c.stroke}画</div>
+      <div class="pinyin" style="font-size:16px; font-weight:600; color:#FF6B9D;">${c.py}</div>
+      <div class="big-char" style="font-size:32px; font-weight:700;">${c.ch}</div>
+      <div class="stroke">${c.stroke}画 · ${c.meaning}</div>
     </div>
   `).join('');
 
   const reviewDisplay = reviewChars.length > 0 ? reviewChars.map(c => `
     <div class="char-card" onclick="speak('${c.ch}')">
-      <div class="big-char">${c.ch}</div>
-      <div class="pinyin">${c.py}</div>
+      <div class="pinyin" style="font-size:16px; font-weight:600; color:#FF6B9D;">${c.py}</div>
+      <div class="big-char" style="font-size:32px;">${c.ch}</div>
     </div>
   `).join('') : '<p style="grid-column:1/-1; text-align:center; color:#999; font-size:13px;">暂无复习内容</p>';
   document.getElementById('review-chars').innerHTML = reviewDisplay;
@@ -2589,6 +2791,8 @@ function renderPinyin() {
 function renderKnowledge() {
   const day = getDayOfYear();
   const item = knowledgeData[day % knowledgeData.length];
+  const storyText = item.story.replace(/\n/g,' ');
+  const explainText = item.explain.replace(/\n/g,' ');
   
   document.getElementById('knowledge-box').innerHTML = `
     <div style="background:linear-gradient(135deg,#FFF8E1,#FFE0B2); border-radius:12px; padding:16px; margin-bottom:12px;">
@@ -2600,19 +2804,22 @@ function renderKnowledge() {
       </div>
       <div style="font-size:15px; color:#333; margin-bottom:8px;">${item.question}</div>
     </div>
-    <div style="background:#fff; border-radius:12px; padding:16px; margin-bottom:12px; font-size:14px; line-height:1.8;">
+    <div style="background:#fff; border-radius:12px; padding:16px; margin-bottom:12px; font-size:16px; line-height:2.2;" id="knowledge-explain-area">
       <div style="font-weight:700; color:#E65100; margin-bottom:8px;">💡 辨析：</div>
       ${item.explain.replace(/\n/g,'<br>')}
     </div>
-    <div style="background:linear-gradient(135deg,#E8F5E9,#C8E6C9); border-radius:12px; padding:16px; font-size:14px; line-height:2;">
+    <div style="text-align:center; margin-bottom:12px;">
+      <button class="btn btn-orange btn-sm" onclick="speakWithHighlight('knowledge-explain-area', '${explainText.replace(/'/g,"\\'")}', 0.7)">🔊 逐字朗读辨析</button>
+    </div>
+    <div style="background:linear-gradient(135deg,#E8F5E9,#C8E6C9); border-radius:12px; padding:16px; font-size:17px; line-height:2.4;" id="knowledge-story-area">
       <div style="font-weight:700; color:#2E7D32; margin-bottom:8px;">📖 小故事：</div>
       ${item.story.replace(/\n/g,'<br>')}
     </div>
-    <div style="background:linear-gradient(135deg,#E3F2FD,#BBDEFB); border-radius:12px; padding:16px; margin-top:12px; font-size:13px; line-height:1.8; color:#1565C0;">
-      <div style="font-weight:700; margin-bottom:6px;">${item.activity}</div>
+    <div style="text-align:center; margin-top:12px; margin-bottom:12px;">
+      <button class="btn btn-success" onclick="speakWithHighlight('knowledge-story-area', '${storyText.replace(/'/g,"\\'")}', 0.7)">🔊 逐字朗读小故事</button>
     </div>
-    <div style="text-align:center; margin-top:12px;">
-      <button class="btn btn-orange" onclick="speak('${item.word}和${item.similar.join("、")}的区别')">🔊 听辨析</button>
+    <div style="background:linear-gradient(135deg,#E3F2FD,#BBDEFB); border-radius:12px; padding:16px; margin-top:12px; font-size:14px; line-height:1.8; color:#1565C0;">
+      <div style="font-weight:700; margin-bottom:6px;">${item.activity}</div>
     </div>
   `;
 }
@@ -2620,6 +2827,139 @@ function renderKnowledge() {
 function renderSpace() {
   const day = getDayOfYear();
   const item = spaceData[day % spaceData.length];
+  const contentText = item.content.replace(/\n/g,' ');
+  
+  // 根据课题选择3D动画
+  let animation = '';
+  if (item.title.includes('方位') || item.title.includes('前后')) {
+    animation = `<div style="background:#1a1a2e; border-radius:12px; padding:20px; margin-top:12px; text-align:center;">
+      <div style="font-size:20px; color:#4ECDC4; line-height:2.5;">
+        ⬆️ 上 &nbsp; ⬇️ 下 &nbsp; ⬅️ 左 &nbsp; ➡️ 右<br>
+        <span style="display:inline-block; animation:arrowMove 2s infinite ease-in-out;">👉</span>
+        转个身，左右就变了！
+      </div>
+    </div>`;
+  } else if (item.title.includes('形状')) {
+    animation = `<div style="background:#1a1a2e; border-radius:12px; padding:20px; margin-top:12px; text-align:center;">
+      <div style="display:flex; gap:30px; justify-content:center; align-items:center;">
+        <div style="text-align:center;">
+          <div style="width:60px;height:60px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#FFD93D,#FF9F43);margin:0 auto;animation:bounce3d 2s infinite ease-in-out;"></div>
+          <div style="color:#FFD93D; font-size:13px; margin-top:6px;">圆形</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="width:60px;height:60px;background:rgba(78,205,196,0.3);border:2px solid #4ECDC4;margin:0 auto;transform:rotate(45deg);animation:spin3d 4s infinite linear;"></div>
+          <div style="color:#4ECDC4; font-size:13px; margin-top:6px;">方形</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="width:0;height:0;border-left:35px solid transparent;border-right:35px solid transparent;border-bottom:60px solid #A78BFA;margin:0 auto;animation:spin3d 4s infinite linear;"></div>
+          <div style="color:#A78BFA; font-size:13px; margin-top:6px;">三角形</div>
+        </div>
+      </div>
+    </div>`;
+  } else if (item.title.includes('重量') || item.title.includes('轻重')) {
+    animation = `<div style="background:#1a1a2e; border-radius:12px; padding:20px; margin-top:12px; text-align:center;">
+      <div style="display:flex; gap:30px; justify-content:center; align-items:center;">
+        <div style="text-align:center;">
+          <div style="font-size:40px; animation:floatAnim 3s infinite ease-in-out;">🪶</div>
+          <div style="color:#4ECDC4; font-size:12px;">轻·浮</div>
+        </div>
+        <div style="color:#888; font-size:20px;">vs</div>
+        <div style="text-align:center;">
+          <div style="font-size:40px; animation:sinkAnim 3s infinite ease-in-out;">🪨</div>
+          <div style="color:#FF6B6B; font-size:12px;">重·沉</div>
+        </div>
+      </div>
+    </div>`;
+  } else if (item.title.includes('平衡')) {
+    animation = `<div style="background:#1a1a2e; border-radius:12px; padding:20px; margin-top:12px; text-align:center;">
+      <div style="font-size:50px; animation:tiltAnim 3s infinite ease-in-out; transform-origin:center;">⚖️</div>
+      <div style="color:#4ECDC4; font-size:13px; margin-top:10px;">两边一样重才能平衡！</div>
+    </div>`;
+  } else if (item.title.includes('温度')) {
+    animation = `<div style="background:#1a1a2e; border-radius:12px; padding:20px; margin-top:12px; text-align:center;">
+      <div style="display:flex; gap:20px; align-items:flex-end; justify-content:center;">
+        <div style="text-align:center;"><div style="font-size:30px;">❄️</div><div style="color:#4ECDC4; font-size:11px;">冷</div></div>
+        <div style="width:20px;height:80px;background:linear-gradient(to top,#FF6B6B,#4ECDC4,#A78BFA);border-radius:10px;animation:tempChange 4s infinite ease-in-out;"></div>
+        <div style="text-align:center;"><div style="font-size:30px;">☀️</div><div style="color:#FF6B6B; font-size:11px;">热</div></div>
+      </div>
+    </div>`;
+  } else if (item.title.includes('声音')) {
+    animation = `<div style="background:#1a1a2e; border-radius:12px; padding:20px; margin-top:12px; text-align:center;">
+      <div style="display:flex; gap:4px; align-items:center; justify-content:center; height:60px;">
+        <div style="width:6px;height:20px;background:#4ECDC4;border-radius:3px;animation:soundBar 1s infinite ease-in-out;"></div>
+        <div style="width:6px;height:40px;background:#4ECDC4;border-radius:3px;animation:soundBar 1s 0.1s infinite ease-in-out;"></div>
+        <div style="width:6px;height:60px;background:#4ECDC4;border-radius:3px;animation:soundBar 1s 0.2s infinite ease-in-out;"></div>
+        <div style="width:6px;height:40px;background:#4ECDC4;border-radius:3px;animation:soundBar 1s 0.3s infinite ease-in-out;"></div>
+        <div style="width:6px;height:20px;background:#4ECDC4;border-radius:3px;animation:soundBar 1s 0.4s infinite ease-in-out;"></div>
+      </div>
+      <div style="color:#4ECDC4; font-size:13px; margin-top:10px;">声音在振动！</div>
+    </div>`;
+  } else if (item.title.includes('影子')) {
+    animation = `<div style="background:#1a1a2e; border-radius:12px; padding:20px; margin-top:12px; text-align:center;">
+      <div style="display:flex; align-items:center; justify-content:center; gap:30px;">
+        <div style="font-size:30px; animation:sunMove 6s infinite linear;">☀️</div>
+        <div style="font-size:40px;">🧍</div>
+        <div style="font-size:40px; color:rgba(255,255,255,0.2); animation:shadowChange 6s infinite linear;">▮</div>
+      </div>
+      <div style="color:#4ECDC4; font-size:13px; margin-top:10px;">太阳移动，影子也在变！</div>
+    </div>`;
+  } else if (item.title.includes('重力')) {
+    animation = `<div style="background:#1a1a2e; border-radius:12px; padding:20px; margin-top:12px; text-align:center;">
+      <div style="font-size:30px; animation:gravityFall 2s infinite ease-in;">🍎</div>
+      <div style="color:#4ECDC4; font-size:13px; margin-top:10px;">重力让苹果往下掉！</div>
+    </div>`;
+  } else if (item.title.includes('浮沉') || item.title.includes('水')) {
+    animation = `<div style="background:#1a1a2e; border-radius:12px; padding:20px; margin-top:12px; text-align:center;">
+      <div style="display:flex; gap:30px; justify-content:center;">
+        <div style="text-align:center;">
+          <div style="font-size:40px; animation:floatAnim 3s infinite ease-in-out;">🪵</div>
+          <div style="color:#4ECDC4; font-size:11px;">浮起来</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:40px; animation:sinkAnim 3s infinite ease-in-out;">🔗</div>
+          <div style="color:#FF6B6B; font-size:11px;">沉下去</div>
+        </div>
+      </div>
+    </div>`;
+  } else if (item.title.includes('力')) {
+    animation = `<div style="background:#1a1a2e; border-radius:12px; padding:20px; margin-top:12px; text-align:center;">
+      <div style="font-size:18px; color:#4ECDC4; display:flex; gap:30px; justify-content:center; align-items:center;">
+        <div>👉推 <span style="display:inline-block; animation:arrowMove 1.5s infinite;">📦</span></div>
+        <div>拉<span style="display:inline-block; animation:arrowMove 1.5s infinite reverse;">📦</span>👈</div>
+      </div>
+    </div>`;
+  } else if (item.title.includes('长度') || item.title.includes('长短')) {
+    animation = `<div style="background:#1a1a2e; border-radius:12px; padding:20px; margin-top:12px; text-align:center;">
+      <div style="display:flex; gap:20px; justify-content:center; align-items:flex-end;">
+        <div style="text-align:center;">
+          <div style="width:80px;height:60px;background:#4ECDC4;border-radius:4px;opacity:0.7;"></div>
+          <div style="color:#4ECDC4; font-size:12px;">长</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="width:30px;height:40px;background:#FF6B9D;border-radius:4px;opacity:0.7;"></div>
+          <div style="color:#FF6B9D; font-size:12px;">短</div>
+        </div>
+      </div>
+    </div>`;
+  } else if (item.title.includes('时间') || item.title.includes('快慢') || item.title.includes('速度')) {
+    animation = `<div style="background:#1a1a2e; border-radius:12px; padding:20px; margin-top:12px; text-align:center;">
+      <div style="display:flex; gap:30px; justify-content:center; align-items:center;">
+        <div style="text-align:center;">
+          <div style="font-size:35px; animation:floatAnim 0.5s infinite;">🏃</div>
+          <div style="color:#FF6B6B; font-size:12px;">快</div>
+        </div>
+        <div style="color:#888;">vs</div>
+        <div style="text-align:center;">
+          <div style="font-size:35px; animation:floatAnim 2s infinite;">🐢</div>
+          <div style="color:#4ECDC4; font-size:12px;">慢</div>
+        </div>
+      </div>
+    </div>`;
+  } else {
+    animation = `<div style="background:#1a1a2e; border-radius:12px; padding:20px; margin-top:12px; text-align:center;">
+      <div style="font-size:40px; animation:bounce3d 2s infinite ease-in-out;">🍊</div>
+    </div>`;
+  }
   
   document.getElementById('space-box').innerHTML = `
     <div style="background:linear-gradient(135deg,#EDE7F6,#D1C4E9); border-radius:12px; padding:16px; margin-bottom:12px;">
@@ -2627,10 +2967,14 @@ function renderSpace() {
         ${item.icon} ${item.title}
       </div>
     </div>
-    <div style="background:#fff; border-radius:12px; padding:16px; font-size:14px; line-height:1.8; margin-bottom:12px;">
+    <div style="background:#fff; border-radius:12px; padding:16px; font-size:18px; line-height:2.4;" id="space-content-area">
       ${item.content.replace(/\n/g,'<br>')}
     </div>
-    <div style="background:linear-gradient(135deg,#FFF3E0,#FFCC80); border-radius:12px; padding:16px; font-size:13px; line-height:1.8; color:#E65100;">
+    <div style="text-align:center; margin:12px 0;">
+      <button class="btn btn-purple" onclick="speakWithHighlight('space-content-area', '${contentText.replace(/'/g,"\\'")}', 0.7)">🔊 逐字朗读</button>
+    </div>
+    ${animation}
+    <div style="background:linear-gradient(135deg,#FFF3E0,#FFCC80); border-radius:12px; padding:16px; font-size:15px; line-height:1.8; color:#E65100; margin-top:12px;">
       <div style="font-weight:700; margin-bottom:6px;">🧪 家庭实验：</div>
       ${item.activity}
     </div>
@@ -2881,27 +3225,52 @@ function clearWritePad() {
   writeCtx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
+let storyPinyinOn = false;
+
 function renderStory() {
   const day = getDayOfYear();
   const story = stories[day % stories.length];
+  const contentHtml = storyPinyinOn 
+    ? story.content.split('\n').map(p => `<p style="line-height:2.8;">${addPinyinToText(p)}</p>`).join('')
+    : story.content.split('\n').map(p => `<p>${p}</p>`).join('');
+  const titleHtml = storyPinyinOn ? addPinyinToText(story.title) : story.title;
   document.getElementById('story-book').innerHTML = `
-    <div class="story-title">${story.title}</div>
-    <div class="story-content">${story.content.split('\n').map(p => `<p>${p}</p>`).join('')}</div>
+    <div class="story-title" id="story-title-area">${titleHtml}</div>
+    <div class="story-content" id="story-content-area">${contentHtml}</div>
+    <div style="text-align:center; margin-top:12px; display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
+      <button class="btn btn-purple" onclick="speakStory()">🔊 逐字朗读</button>
+      <button class="btn btn-orange btn-sm" onclick="toggleStoryPinyin()">${storyPinyinOn ? '🔤 隐藏拼音' : '🔤 显示拼音'}</button>
+    </div>
   `;
+}
+
+function toggleStoryPinyin() {
+  storyPinyinOn = !storyPinyinOn;
+  renderStory();
 }
 
 function speakStory() {
   const day = getDayOfYear();
   const story = stories[day % stories.length];
-  speak(story.content.replace(/\n/g, ' '), 0.75);
+  speakWithHighlight('story-content-area', story.content, 0.7);
 }
 
 // ============ 数学模块 ============
 
 let currentMathProblems = [];
 
+// 种子随机数 - 确保同一天题目一致
+function seededRandom(seed) {
+  let s = seed;
+  return function() {
+    s = (s * 9301 + 49297) % 233280;
+    return s / 233280;
+  };
+}
+
 function generateMath() {
   const day = getDayOfYear();
+  const rnd = seededRandom(day * 1000 + Math.floor(Date.now() / (1000 * 60 * 5))); // 每5分钟换一组题
   const problems = [];
   const methods = ['poshifa', 'coushifa', 'normal'];
   
@@ -2911,28 +3280,28 @@ function generateMath() {
     
     if (method === 'coushifa') {
       // 凑十法：a+b，其中一个数接近10
-      a = Math.floor(Math.random() * 9) + 1;
-      b = Math.random() > 0.5 ? (10 - a) : (Math.floor(Math.random() * 9) + 1);
+      a = Math.floor(rnd() * 9) + 1;
+      b = rnd() > 0.5 ? (10 - a) : (Math.floor(rnd() * 9) + 1);
       result = a + b;
       methodTag = '<span class="method-tag tag-coushifa">凑十法</span>';
       problems.push({q: `${a} + ${b} = `, answer: result, method: methodTag, input: ''});
     } else if (method === 'poshifa') {
       // 破十法：十几减几
-      a = Math.floor(Math.random() * 10) + 10;
-      b = Math.floor(Math.random() * (a - 10)) + 1;
+      a = Math.floor(rnd() * 10) + 10;
+      b = Math.floor(rnd() * (a - 10)) + 1;
       result = a - b;
       methodTag = '<span class="method-tag tag-poshifa">破十法</span>';
       problems.push({q: `${a} - ${b} = `, answer: result, method: methodTag, input: ''});
     } else {
       // 普通计算
-      const op = Math.random() > 0.5 ? '+' : '-';
+      const op = rnd() > 0.5 ? '+' : '-';
       if (op === '+') {
-        a = Math.floor(Math.random() * 50) + 1;
-        b = Math.floor(Math.random() * (100 - a)) + 1;
+        a = Math.floor(rnd() * 50) + 1;
+        b = Math.floor(rnd() * (100 - a)) + 1;
         result = a + b;
       } else {
-        a = Math.floor(Math.random() * 99) + 1;
-        b = Math.floor(Math.random() * a) + 1;
+        a = Math.floor(rnd() * 99) + 1;
+        b = Math.floor(rnd() * a) + 1;
         result = a - b;
       }
       problems.push({q: `${a} ${op} ${b} = `, answer: result, method: '', input: ''});
@@ -3068,14 +3437,17 @@ function renderReadTip() {
     selected.push(questions[(day * 3 + i) % questions.length]);
   }
   
-  document.getElementById('read-tip-questions').innerHTML = selected.map((q, i) => `
-    <div style="background:#fff; border-radius:10px; padding:14px; margin:10px 0; font-size:15px; line-height:1.8;">
-      <strong>第${i+1}题：</strong>${q.q}
-      <div style="margin-top:8px; padding:8px; background:#FFF8E1; border-radius:8px; font-size:13px; color:#666;">
+  document.getElementById('read-tip-questions').innerHTML = selected.map((q, i) => {
+    const cleanQ = q.q.replace(/<[^>]+>/g,'').replace(/'/g,"\\'");
+    return `
+    <div style="background:#fff; border-radius:10px; padding:14px; margin:10px 0; font-size:17px; line-height:2;">
+      <strong>第${i+1}题：</strong><span id="readtip-q-${i}">${q.q}</span>
+      <button class="sentence-speak" onclick="speakWithHighlight('readtip-q-${i}', '${cleanQ}', 0.65)" style="width:30px;height:30px;font-size:14px;border:none;border-radius:50%;background:#A78BFA;color:#fff;cursor:pointer;margin-left:6px;">🔊</button>
+      <div style="margin-top:8px; padding:8px; background:#FFF8E1; border-radius:8px; font-size:14px; color:#666;">
         💡 ${q.tip}
       </div>
     </div>
-  `).join('');
+  `;}).join('');
 }
 
 function renderWrongBook() {
@@ -3169,7 +3541,7 @@ function renderEnglish() {
       ${words.map(w => `
         <div class="en-word">
           <div style="font-size:28px;">${w.emoji}</div>
-          <div class="ew">${w.en} <button class="speak-btn" style="width:24px;height:24px;font-size:12px;" onclick="speakEn('${w.en}')">🔊</button></div>
+          <div class="ew">${w.en} <button class="speak-btn" style="width:28px;height:28px;font-size:14px;" onclick="speakEnWord('${w.en}')">🔊</button></div>
           <div class="ec">${w.cn}</div>
         </div>
       `).join('')}
@@ -3724,7 +4096,7 @@ init();
 
 // 注册 Service Worker（PWA离线缓存）
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').then(reg => {
+  navigator.serviceWorker.register('/youzi-study/sw.js').then(reg => {
     console.log('柚子学习 Service Worker 已注册');
   }).catch(err => {
     console.log('Service Worker 注册失败:', err);

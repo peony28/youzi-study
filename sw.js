@@ -1,15 +1,17 @@
-const CACHE_NAME = 'youzi-v1';
+const CACHE_NAME = 'youzi-v2';
+const BASE = '/youzi-study';
 const urlsToCache = [
-  '/index.html',
-  '/manifest.json',
-  '/icons/icon-72x72.png',
-  '/icons/icon-96x96.png',
-  '/icons/icon-128x128.png',
-  '/icons/icon-144x144.png',
-  '/icons/icon-152x152.png',
-  '/icons/icon-192x192.png',
-  '/icons/icon-384x384.png',
-  '/icons/icon-512x512.png'
+  `${BASE}/index.html`,
+  `${BASE}/manifest.json`,
+  `${BASE}/sw.js`,
+  `${BASE}/icons/icon-72x72.png`,
+  `${BASE}/icons/icon-96x96.png`,
+  `${BASE}/icons/icon-128x128.png`,
+  `${BASE}/icons/icon-144x144.png`,
+  `${BASE}/icons/icon-152x152.png`,
+  `${BASE}/icons/icon-192x192.png`,
+  `${BASE}/icons/icon-384x384.png`,
+  `${BASE}/icons/icon-512x512.png`
 ];
 
 // 安装事件 - 缓存资源
