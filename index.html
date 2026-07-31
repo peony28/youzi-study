@@ -66,6 +66,58 @@ body {
   z-index: 100;
   box-shadow: 2px 0 10px rgba(0,0,0,0.1);
   overflow-y: auto;
+  transition: width 0.3s ease;
+}
+
+/* 侧边栏收起状态 */
+.sidebar.collapsed {
+  width: 50px;
+  padding: 15px 0;
+}
+.sidebar.collapsed .nav-item {
+  width: 40px;
+  height: 40px;
+  margin: 4px 0;
+  border-radius: 10px;
+}
+.sidebar.collapsed .nav-item span:not(.icon) {
+  display: none;
+}
+.sidebar.collapsed .nav-item .icon {
+  font-size: 20px;
+}
+.sidebar.collapsed .sidebar-logo {
+  width: 36px;
+  height: 36px;
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+.sidebar.collapsed .sidebar-toggle {
+  font-size: 16px;
+}
+
+/* 收起/展开按钮 */
+.sidebar-toggle {
+  position: absolute;
+  top: 15px;
+  right: -14px;
+  width: 28px;
+  height: 28px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #FF6B9D;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  z-index: 101;
+  transition: transform 0.3s ease;
+  border: none;
+}
+.sidebar-toggle:hover {
+  transform: scale(1.15);
 }
 
 .sidebar-logo {
@@ -119,6 +171,13 @@ body {
   width: calc(100% - 80px);
   min-height: 100vh;
   padding: 15px;
+  transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+/* 侧边栏收起时主内容区扩大 */
+.main-content.expanded {
+  margin-left: 50px;
+  width: calc(100% - 50px);
 }
 
 .page {
@@ -1474,7 +1533,7 @@ rt {
 }
 .stroke-demo-area {
   flex: 1;
-  min-width: 160px;
+  min-width: 220px;
   text-align: center;
 }
 .stroke-demo-label {
@@ -1483,8 +1542,8 @@ rt {
   margin-bottom: 6px;
 }
 .stroke-char-display {
-  width: 140px;
-  height: 140px;
+  width: 200px;
+  height: 200px;
   margin: 0 auto;
   border: 3px solid #FFE0B2;
   border-radius: 12px;
@@ -1537,7 +1596,7 @@ rt {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 80px;
+  font-size: 120px;
   color: #E0E0E0;
   font-family: 'STKaiti', 'KaiTi', serif;
   pointer-events: none;
@@ -1545,7 +1604,7 @@ rt {
 /* 手写田字格 */
 .write-canvas-area {
   flex: 1;
-  min-width: 160px;
+  min-width: 220px;
   text-align: center;
 }
 .write-canvas-label {
@@ -1554,8 +1613,8 @@ rt {
   margin-bottom: 6px;
 }
 .write-canvas {
-  width: 140px;
-  height: 140px;
+  width: 200px;
+  height: 200px;
   border: 3px solid #4ECDC4;
   border-radius: 12px;
   background: #fff;
@@ -1632,7 +1691,8 @@ rt {
 <body>
 
 <!-- 侧边导航栏 -->
-<nav class="sidebar">
+<nav class="sidebar" id="sidebar">
+  <button class="sidebar-toggle" id="sidebar-toggle" onclick="toggleSidebar()">‹</button>
   <div class="sidebar-logo">柚</div>
   <div class="nav-item active" data-page="home">
     <span class="icon">🏠</span>
@@ -2496,55 +2556,49 @@ function speakEn(text) {
   speechSynthesis.speak(u1);
 }
 
-// 英语单词朗读 - 逐字母拼写+整词读两遍
+// 英语单词朗读 - 慢速读两遍，标准美式/英式发音
 function speakEnWord(word) {
   if (!('speechSynthesis' in window)) return;
   speechSynthesis.cancel();
   
   const voices = speechSynthesis.getVoices();
   const enVoices = voices.filter(v => v.lang.startsWith('en'));
+  // 优先选高质量语音
   const preferred = enVoices.find(v => v.name.includes('Google')) 
                  || enVoices.find(v => v.name.includes('Samantha'))
+                 || enVoices.find(v => v.name.includes('Daniel'))
                  || enVoices.find(v => v.lang === 'en-US')
                  || enVoices[0];
   
-  // 先逐字母拼写
-  const letters = word.split('').join(', ');
-  const u0 = new SpeechSynthesisUtterance(letters);
-  u0.lang = 'en-US';
-  if (preferred) u0.voice = preferred;
-  u0.rate = 0.6;
+  // 第一遍慢速
+  const u1 = new SpeechSynthesisUtterance(word);
+  u1.lang = preferred ? preferred.lang : 'en-US';
+  if (preferred) u1.voice = preferred;
+  u1.rate = 0.5;   // 很慢，让孩子听清每个音节
+  u1.pitch = 1.0;
   
-  u0.onend = function() {
+  u1.onend = function() {
     setTimeout(() => {
-      // 再读整词，慢速
-      const u1 = new SpeechSynthesisUtterance(word);
-      u1.lang = preferred ? preferred.lang : 'en-US';
-      if (preferred) u1.voice = preferred;
-      u1.rate = 0.5;
-      u1.onend = function() {
-        setTimeout(() => {
-          // 第二遍正常速度
-          const u2 = new SpeechSynthesisUtterance(word);
-          u2.lang = preferred ? preferred.lang : 'en-US';
-          if (preferred) u2.voice = preferred;
-          u2.rate = 0.75;
-          speechSynthesis.speak(u2);
-        }, 300);
-      };
-      speechSynthesis.speak(u1);
-    }, 300);
+      // 第二遍正常速度
+      const u2 = new SpeechSynthesisUtterance(word);
+      u2.lang = preferred ? preferred.lang : 'en-US';
+      if (preferred) u2.voice = preferred;
+      u2.rate = 0.7;
+      u2.pitch = 1.0;
+      speechSynthesis.speak(u2);
+    }, 400);
   };
-  speechSynthesis.speak(u0);
+  
+  speechSynthesis.speak(u1);
 }
 
-// 逐字高亮朗读器 - 读一个字变一个字颜色
+// 逐字高亮朗读器 - 读一个字变一个字颜色（保留原有HTML结构，不破坏拼音标注）
 let highlightTimer = null;
+let highlightSpans = [];
 
 function speakWithHighlight(containerId, text, rate) {
-  if (highlightTimer) {
-    clearTimeout(highlightTimer);
-  }
+  // 清理上一次的高亮
+  clearHighlight();
   
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -2552,64 +2606,176 @@ function speakWithHighlight(containerId, text, rate) {
   // 先停止其他朗读
   if ('speechSynthesis' in window) speechSynthesis.cancel();
   
-  // 把文字拆成单字span
-  const chars = text.split('');
-  container.innerHTML = chars.map((ch, i) => 
-    ch === '\n' ? '<br>' : `<span class="reading-char" data-idx="${i}" style="transition: color 0.3s, font-weight 0.3s; position:relative;">${ch}</span>`
-  ).join('');
+  const spokenRate = rate || 0.65;
   
-  const charSpans = container.querySelectorAll('.reading-char');
+  // 收集容器内所有文本节点，为每个汉字创建可高亮的span包装
+  // 这样不破坏原有的ruby/rt等标签结构
+  highlightSpans = [];
+  const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null, false);
+  const textNodes = [];
+  let node;
+  while (node = walker.nextNode()) {
+    textNodes.push(node);
+  }
+  
+  // 为每个文本节点中的每个汉字创建span
+  textNodes.forEach(textNode => {
+    const frag = document.createDocumentFragment();
+    const chars = textNode.textContent.split('');
+    chars.forEach(ch => {
+      if (/[\u4e00-\u9fff]/.test(ch)) {
+        // 汉字 - 创建可高亮span
+        const span = document.createElement('span');
+        span.className = 'reading-char';
+        span.style.transition = 'color 0.3s ease, font-weight 0.3s ease';
+        span.textContent = ch;
+        frag.appendChild(span);
+        highlightSpans.push(span);
+      } else {
+        // 非汉字（标点、空格等）直接保留
+        frag.appendChild(document.createTextNode(ch));
+      }
+    });
+    textNode.parentNode.replaceChild(frag, textNode);
+  });
+  
+  // 没有汉字就无法高亮
+  if (highlightSpans.length === 0) {
+    // 直接朗读
+    if ('speechSynthesis' in window) {
+      const u = new SpeechSynthesisUtterance(text.replace(/\n/g, ' '));
+      u.lang = 'zh-CN';
+      u.rate = spokenRate;
+      u.pitch = 1.05;
+      speechSynthesis.speak(u);
+    }
+    return;
+  }
+  
   let currentIdx = 0;
+  // 重置所有span样式
+  highlightSpans.forEach(s => {
+    s.style.color = '';
+    s.style.fontWeight = '';
+    s.style.textShadow = '';
+  });
   
-  // 用定时器逐字高亮
-  const charsPerSecond = (rate || 0.65) * 4.5;
-  const interval = 1000 / charsPerSecond;
+  // 方法1: 尝试用 onboundary 事件同步（精确同步）
+  // 方法2: 用定时器估算（备用）
+  let useBoundary = false;
   
-  function highlightNext() {
+  function highlightChar(idx) {
     // 上一个字变浅红（已读）
-    if (currentIdx > 0 && charSpans[currentIdx - 1]) {
-      charSpans[currentIdx - 1].style.color = '#E91E63';
-      charSpans[currentIdx - 1].style.fontWeight = '600';
+    if (idx > 0 && highlightSpans[idx - 1]) {
+      highlightSpans[idx - 1].style.color = '#E91E63';
+      highlightSpans[idx - 1].style.fontWeight = '600';
     }
     // 当前字变红色加粗
-    if (currentIdx < charSpans.length) {
-      charSpans[currentIdx].style.color = '#FF0000';
-      charSpans[currentIdx].style.fontWeight = '700';
-      charSpans[currentIdx].style.textShadow = '0 0 8px rgba(255,0,0,0.4)';
+    if (idx < highlightSpans.length) {
+      highlightSpans[idx].style.color = '#FF0000';
+      highlightSpans[idx].style.fontWeight = '700';
+      highlightSpans[idx].style.textShadow = '0 0 8px rgba(255,0,0,0.4)';
+    }
+  }
+  
+  function highlightNext() {
+    if (currentIdx < highlightSpans.length) {
+      highlightChar(currentIdx);
       currentIdx++;
+      // 根据语音速率估算每个字的间隔
+      // 语音速率0.65大约每秒读3-4个汉字，标点会自然停顿
+      const interval = 1000 / (spokenRate * 4);
       highlightTimer = setTimeout(highlightNext, interval);
     } else {
-      // 朗读完毕，恢复颜色
-      setTimeout(() => {
-        charSpans.forEach(s => {
+      // 朗读完毕，延迟恢复
+      highlightTimer = setTimeout(() => {
+        clearHighlight();
+      }, 2000);
+    }
+  }
+  
+  // 语音合成朗读
+  if ('speechSynthesis' in window) {
+    const u = new SpeechSynthesisUtterance(text.replace(/\n/g, ' '));
+    u.lang = 'zh-CN';
+    u.rate = spokenRate;
+    u.pitch = 1.05;
+    
+    // 尝试使用 boundary 事件精确同步
+    u.onboundary = function(event) {
+      if (event.name === 'word' || event.charIndex !== undefined) {
+        useBoundary = true;
+        // 根据charIndex找到对应的高亮位置
+        // charIndex是相对于纯文本的字符位置
+        // 计算当前应该高亮第几个汉字
+        const spokenText = text.replace(/\n/g, ' ');
+        let charCount = 0;
+        for (let i = 0; i < event.charIndex && i < spokenText.length; i++) {
+          if (/[\u4e00-\u9fff]/.test(spokenText[i])) {
+            charCount++;
+          }
+        }
+        // 高亮到对应的汉字
+        if (charCount < highlightSpans.length) {
+          // 清除之前的高亮
+          highlightSpans.forEach(s => {
+            s.style.color = '';
+            s.style.fontWeight = '';
+            s.style.textShadow = '';
+          });
+          // 高亮当前位置及之前已读的
+          for (let j = 0; j < charCount; j++) {
+            if (highlightSpans[j]) {
+              highlightSpans[j].style.color = '#E91E63';
+              highlightSpans[j].style.fontWeight = '600';
+            }
+          }
+          highlightChar(charCount);
+          currentIdx = charCount + 1;
+        }
+      }
+    };
+    
+    u.onend = function() {
+      if (highlightTimer) clearTimeout(highlightTimer);
+      // 如果boundary没有触发，用定时器跑完
+      if (!useBoundary && currentIdx < highlightSpans.length) {
+        // 定时器模式跑完剩余
+        highlightSpans.forEach(s => {
           s.style.color = '';
           s.style.fontWeight = '';
           s.style.textShadow = '';
         });
-      }, 1500);
-    }
-  }
-  
-  // 同时用语音合成朗读
-  if ('speechSynthesis' in window) {
-    const u = new SpeechSynthesisUtterance(text.replace(/\n/g, ' '));
-    u.lang = 'zh-CN';
-    u.rate = rate || 0.65;
-    u.pitch = 1.05;
-    u.onend = function() {
-      clearTimeout(highlightTimer);
-      // 恢复所有字颜色
-      charSpans.forEach(s => {
-        s.style.color = '';
-        s.style.fontWeight = '';
-        s.style.textShadow = '';
-      });
+      }
+      // 延迟恢复
+      highlightTimer = setTimeout(() => {
+        clearHighlight();
+      }, 2000);
     };
+    
     speechSynthesis.speak(u);
   }
   
-  // 启动高亮定时器
-  highlightNext();
+  // 如果boundary事件不触发，用定时器作为后备
+  // 延迟500ms启动定时器，给boundary事件机会
+  setTimeout(() => {
+    if (!useBoundary) {
+      highlightNext();
+    }
+  }, 500);
+}
+
+function clearHighlight() {
+  if (highlightTimer) {
+    clearTimeout(highlightTimer);
+    highlightTimer = null;
+  }
+  highlightSpans.forEach(s => {
+    s.style.color = '';
+    s.style.fontWeight = '';
+    s.style.textShadow = '';
+  });
+  highlightSpans = [];
 }
 
 // 拼音朗读 - 先读拼音再读字
@@ -2621,10 +2787,21 @@ function speakPinyin(py, word) {
 // 停止所有朗读
 function stopAllSpeak() {
   if ('speechSynthesis' in window) speechSynthesis.cancel();
-  if (highlightTimer) clearTimeout(highlightTimer);
+  clearHighlight();
 }
 
 // ============ 页面切换 ============
+
+// 侧边栏收起/展开
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const main = document.querySelector('.main-content');
+  const toggle = document.getElementById('sidebar-toggle');
+  sidebar.classList.toggle('collapsed');
+  main.classList.toggle('expanded');
+  // 切换箭头方向
+  toggle.textContent = sidebar.classList.contains('collapsed') ? '›' : '‹';
+}
 
 function goPage(pageId) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -3133,8 +3310,8 @@ function initWritePad() {
   
   // 设置canvas尺寸
   const rect = canvas.parentElement.getBoundingClientRect();
-  canvas.width = rect.width || 140;
-  canvas.height = rect.height || 140;
+  canvas.width = rect.width || 200;
+  canvas.height = rect.height || 200;
   
   writeCtx = canvas.getContext('2d');
   writeCtx.strokeStyle = '#333';
