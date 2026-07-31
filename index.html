@@ -3536,23 +3536,372 @@ function checkMathCalc() {
   }
 }
 
+// ============ 数感星球 - 可交互数感训练 ============
+let nsCurrentGame = null;
+let nsCurrentIdx = 0;
+let nsCorrect = 0;
+let nsQuestions = [];
+
 function renderNumberSense() {
-  const games = [
-    {name:'数数游戏', desc:'从1数到100', icon:'🔢', url:'https://www.mathgames.com'},
-    {name:'比大小', desc:'比较数字大小', icon:'⚖️', url:'https://www.mathgames.com'},
-    {name:'找规律', desc:'发现数字规律', icon:'🔍', url:'https://www.mathgames.com'},
-    {name:'相邻数', desc:'找出相邻的数字', icon:'🔗', url:'https://www.mathgames.com'}
-  ];
-  document.getElementById('number-sense-games').innerHTML = games.map(g => `
-    <div class="video-link" onclick="showToast('🪐 数感星球：${g.name}')" style="background:#fff;">
-      <span class="v-icon">${g.icon}</span>
-      <div class="v-info">
-        <div class="v-title">${g.name}</div>
-        <div class="v-desc">${g.desc}</div>
+  const day = getDayOfYear();
+  // 难度等级：每过10天升一级，最高5级
+  const level = Math.min(5, Math.floor(day / 10) + 1);
+  
+  // 游戏类型轮换：每天换一种
+  const gameTypes = ['count', 'compare', 'pattern', 'neighbor', 'order', 'missing'];
+  const todayGame = gameTypes[day % gameTypes.length];
+  
+  const gameInfo = {
+    count: {name:'数数大冒险', icon:'🔢', desc:'数一数有多少个'},
+    compare: {name:'比大小', icon:'⚖️', desc:'哪个大哪个小'},
+    pattern: {name:'找规律', icon:'🔍', desc:'下一个该填什么'},
+    neighbor: {name:'相邻数', icon:'🔗', desc:'找出好朋友'},
+    order: {name:'排排队', icon:'📊', desc:'从小到大排一排'},
+    missing: {name:'填数字', icon:'✏️', desc:'空格里填什么'}
+  };
+  
+  const g = gameInfo[todayGame];
+  
+  // 生成题目
+  nsQuestions = generateNSQuestions(todayGame, level, day);
+  nsCurrentIdx = 0;
+  nsCorrect = 0;
+  nsCurrentGame = todayGame;
+  
+  document.getElementById('number-sense-games').innerHTML = `
+    <div style="background:#fff; border-radius:14px; padding:16px; margin-bottom:12px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:6px;">
+        <div style="font-size:18px; font-weight:700; color:#1565C0;">${g.icon} ${g.name}</div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <span style="background:#E3F2FD; padding:4px 12px; border-radius:12px; font-size:13px; color:#1565C0; font-weight:600;">⭐ 等级 ${level}</span>
+          <span style="background:#FFF3E0; padding:4px 12px; border-radius:12px; font-size:13px; color:#E65100; font-weight:600;" id="ns-score">✅ 0/${nsQuestions.length}</span>
+        </div>
       </div>
-      <span style="font-size:20px;">▶️</span>
+      <p style="font-size:13px; color:#666; margin-bottom:12px;">${g.desc}（共${nsQuestions.length}题，答对越多越厉害！）</p>
+      <div id="ns-game-area" style="min-height:120px;"></div>
+      <div id="ns-result" style="text-align:center; margin-top:12px;"></div>
     </div>
-  `).join('');
+  `;
+  
+  renderNSQuestion();
+}
+
+function generateNSQuestions(type, level, day) {
+  const qs = [];
+  // 使用种子随机，确保同一天题目一致
+  let seed = day * 100 + level * 37;
+  const rnd = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+  
+  // 数量根据等级递增
+  const count = 5 + level; // 6~10题
+  
+  // 数字范围根据等级扩大
+  const maxNum = level === 1 ? 10 : level === 2 ? 20 : level === 3 ? 50 : level === 4 ? 80 : 100;
+  
+  for (let i = 0; i < count; i++) {
+    if (type === 'count') {
+      // 数数：显示若干图标，数一数有几个
+      const n = Math.floor(rnd() * maxNum) + 1;
+      const icons = ['🍎','🌟','🎈','🐟','🌸','🦋','🍓','🍀'];
+      const icon = icons[Math.floor(rnd() * icons.length)];
+      qs.push({
+        type: 'count',
+        q: `数一数下面有几个${icon}？`,
+        emoji: icon,
+        count: n,
+        answer: n,
+        options: genOptions(n, maxNum, rnd)
+      });
+    } else if (type === 'compare') {
+      // 比大小：两个数比一比
+      let a = Math.floor(rnd() * maxNum) + 1;
+      let b = Math.floor(rnd() * maxNum) + 1;
+      while (b === a) b = Math.floor(rnd() * maxNum) + 1;
+      qs.push({
+        type: 'compare',
+        q: `${a} 和 ${b}，哪个大？`,
+        a: a, b: b,
+        answer: Math.max(a, b),
+        options: [a, b].sort(() => rnd() - 0.5)
+      });
+    } else if (type === 'pattern') {
+      // 找规律：数列填空
+      const start = Math.floor(rnd() * 5) + 1;
+      const step = Math.floor(rnd() * 3) + 1; // 1,2,3递增
+      const seq = [start, start + step, start + step * 2, start + step * 3];
+      const answer = start + step * 4;
+      qs.push({
+        type: 'pattern',
+        q: `找规律，下一个数是几？`,
+        seq: seq,
+        answer: answer,
+        options: genOptions(answer, maxNum, rnd)
+      });
+    } else if (type === 'neighbor') {
+      // 相邻数：一个数的左边和右边是几
+      const n = Math.floor(rnd() * (maxNum - 2)) + 2;
+      qs.push({
+        type: 'neighbor',
+        q: `${n} 的相邻数是哪两个？`,
+        answer: `${n-1} 和 ${n+1}`,
+        a1: n - 1, a2: n + 1,
+        options: [
+          `${n-1} 和 ${n+1}`,
+          `${n-2} 和 ${n+1}`,
+          `${n-1} 和 ${n+2}`,
+          `${n} 和 ${n+1}`
+        ].sort(() => rnd() - 0.5)
+      });
+    } else if (type === 'order') {
+      // 排序：4个数字从小到大排
+      const nums = [];
+      while (nums.length < 4) {
+        const v = Math.floor(rnd() * maxNum) + 1;
+        if (!nums.includes(v)) nums.push(v);
+      }
+      const sorted = [...nums].sort((a, b) => a - b);
+      qs.push({
+        type: 'order',
+        q: `把这4个数从小到大排一排`,
+        nums: nums,
+        answer: sorted.join(' < ')
+      });
+    } else if (type === 'missing') {
+      // 填空：数轴上缺了一个数
+      const start = Math.floor(rnd() * (maxNum - 5)) + 1;
+      const missingIdx = Math.floor(rnd() * 4) + 1; // 第1~4个位置缺
+      const seq = [start, start+1, start+2, start+3, start+4];
+      const answer = seq[missingIdx];
+      seq[missingIdx] = '?';
+      qs.push({
+        type: 'missing',
+        q: `想一想，问号处应该是几？`,
+        seq: seq,
+        answer: answer,
+        options: genOptions(answer, maxNum, rnd)
+      });
+    }
+  }
+  return qs;
+}
+
+function genOptions(answer, maxNum, rnd) {
+  const opts = [answer];
+  while (opts.length < 4) {
+    let v;
+    if (answer <= 5) v = Math.floor(rnd() * 10) + 1;
+    else v = answer + Math.floor(rnd() * 10) - 5;
+    if (v < 1) v = 1;
+    if (v > maxNum + 10) v = maxNum;
+    if (!opts.includes(v)) opts.push(v);
+  }
+  return opts.sort(() => rnd() - 0.5);
+}
+
+function renderNSQuestion() {
+  const area = document.getElementById('ns-game-area');
+  if (!area) return;
+  
+  if (nsCurrentIdx >= nsQuestions.length) {
+    // 全部答完
+    const total = nsQuestions.length;
+    const rate = Math.round(nsCorrect / total * 100);
+    let stars = '';
+    if (rate >= 90) stars = '⭐⭐⭐';
+    else if (rate >= 70) stars = '⭐⭐';
+    else if (rate >= 50) stars = '⭐';
+    
+    area.innerHTML = `
+      <div style="text-align:center; padding:20px;">
+        <div style="font-size:48px; margin-bottom:10px;">🎉</div>
+        <div style="font-size:20px; font-weight:700; color:#1565C0;">数感星球闯关完成！</div>
+        <div style="font-size:28px; margin:10px 0;">${stars}</div>
+        <div style="font-size:16px; color:#666;">答对 ${nsCorrect} / ${total} 题（${rate}%）</div>
+        <button class="btn btn-purple" style="margin-top:14px;" onclick="renderNumberSense()">🔄 再玩一组</button>
+      </div>
+    `;
+    if (rate >= 70) completeTask('数感训练');
+    return;
+  }
+  
+  const q = nsQuestions[nsCurrentIdx];
+  let html = `<div style="font-size:16px; font-weight:600; color:#333; margin-bottom:12px;">第 ${nsCurrentIdx + 1} / ${nsQuestions.length} 题</div>`;
+  html += `<div style="font-size:18px; color:#1565C0; margin-bottom:14px; font-weight:600;">${q.q}</div>`;
+  
+  if (q.type === 'count') {
+    // 显示emoji让小朋友数
+    let emojis = '';
+    for (let i = 0; i < q.count; i++) emojis += q.emoji + ' ';
+    html += `<div style="font-size:32px; text-align:center; padding:16px; background:#E3F2FD; border-radius:12px; margin-bottom:14px; line-height:2;">${emojis}</div>`;
+    html += `<div style="display:grid; grid-template-columns:repeat(4,1fr); gap:8px;">`;
+    q.options.forEach(opt => {
+      html += `<button onclick="checkNSAnswer(${opt}, ${q.answer})" style="padding:14px; font-size:20px; font-weight:700; border:2px solid #4ECDC4; border-radius:12px; background:#fff; color:#1565C0; cursor:pointer;">${opt}</button>`;
+    });
+    html += `</div>`;
+  } else if (q.type === 'compare') {
+    html += `<div style="display:flex; gap:16px; justify-content:center; margin-bottom:14px;">`;
+    html += `<div style="font-size:36px; font-weight:700; color:#FF6B9D; background:#FFF; padding:16px 24px; border-radius:12px; border:3px solid #FF6B9D;">${q.a}</div>`;
+    html += `<div style="font-size:28px; color:#999; align-self:center;">vs</div>`;
+    html += `<div style="font-size:36px; font-weight:700; color:#4ECDC4; background:#FFF; padding:16px 24px; border-radius:12px; border:3px solid #4ECDC4;">${q.b}</div>`;
+    html += `</div>`;
+    html += `<div style="text-align:center;">`;
+    q.options.forEach(opt => {
+      html += `<button onclick="checkNSAnswer(${opt}, ${q.answer})" style="padding:14px 28px; font-size:24px; font-weight:700; border:2px solid #A78BFA; border-radius:12px; background:#fff; color:#333; cursor:pointer; margin:4px;">${opt}</button>`;
+    });
+    html += `</div>`;
+  } else if (q.type === 'pattern') {
+    html += `<div style="display:flex; gap:8px; justify-content:center; align-items:center; margin-bottom:14px; flex-wrap:wrap;">`;
+    q.seq.forEach(n => {
+      html += `<div style="width:50px; height:50px; background:#E3F2FD; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:700; color:#1565C0;">${n}</div>`;
+    });
+    html += `<div style="width:50px; height:50px; background:#FFF3E0; border:2px dashed #FF9F43; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:22px; color:#FF9F43;">?</div>`;
+    html += `</div>`;
+    html += `<div style="display:grid; grid-template-columns:repeat(4,1fr); gap:8px;">`;
+    q.options.forEach(opt => {
+      html += `<button onclick="checkNSAnswer(${opt}, ${q.answer})" style="padding:14px; font-size:20px; font-weight:700; border:2px solid #4ECDC4; border-radius:12px; background:#fff; color:#1565C0; cursor:pointer;">${opt}</button>`;
+    });
+    html += `</div>`;
+  } else if (q.type === 'neighbor') {
+    html += `<div style="text-align:center; margin-bottom:14px;">`;
+    html += `<span style="font-size:36px; font-weight:700; color:#FF6B9D;">? , ${q.a1 && q.a2 ? '' : ''}</span>`;
+    html += `<span style="font-size:36px; font-weight:700; color:#1565C0; background:#E3F2FD; padding:4px 16px; border-radius:10px; margin:0 8px;">${parseInt(q.answer.split(' ')[0]) + 1}</span>`;
+    html += `<span style="font-size:28px; color:#999;">, ?</span>`;
+    html += `</div>`;
+    html += `<div style="display:grid; grid-template-columns:repeat(2,1fr); gap:8px;">`;
+    q.options.forEach((opt, i) => {
+      html += `<button onclick="checkNSAnswerStr('${opt}', '${q.answer}')" style="padding:14px; font-size:18px; font-weight:700; border:2px solid #A78BFA; border-radius:12px; background:#fff; color:#333; cursor:pointer;">${opt}</button>`;
+    });
+    html += `</div>`;
+  } else if (q.type === 'order') {
+    html += `<div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:10px;">`;
+    q.nums.forEach(n => {
+      html += `<div class="ns-drag-item" draggable="true" data-val="${n}" style="width:55px; height:55px; background:#E8F5E9; border:2px solid #66BB6A; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:700; color:#2E7D32; cursor:pointer;">${n}</div>`;
+    });
+    html += `</div>`;
+    html += `<p style="font-size:13px; color:#888; text-align:center;">👆点击数字，按从小到大填入下面的格子</p>`;
+    html += `<div id="ns-order-slots" style="display:flex; gap:8px; justify-content:center; margin-top:10px;">`;
+    for (let i = 0; i < 4; i++) {
+      html += `<div id="ns-slot-${i}" onclick="nsRemoveFromSlot(${i})" style="width:55px; height:55px; background:#FFF8E1; border:2px dashed #FFB74D; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:700; color:#999;"></div>`;
+    }
+    html += `</div>`;
+    html += `<div style="text-align:center; margin-top:12px;">
+      <button onclick="checkNSOrder()" class="btn btn-success" style="padding:10px 24px;">✅ 确认排列</button>
+    </div>`;
+    html += `<script>
+      (function() {
+        var items = document.querySelectorAll('.ns-drag-item');
+        items.forEach(function(item) {
+          item.addEventListener('click', function() {
+            var val = this.getAttribute('data-val');
+            for (var i = 0; i < 4; i++) {
+              var slot = document.getElementById('ns-slot-' + i);
+              if (slot && !slot.getAttribute('data-val')) {
+                slot.textContent = val;
+                slot.setAttribute('data-val', val);
+                slot.style.color = '#2E7D32';
+                slot.style.background = '#E8F5E9';
+                slot.style.border = '2px solid #66BB6A';
+                this.style.opacity = '0.3';
+                this.style.pointerEvents = 'none';
+                break;
+              }
+            }
+          });
+        });
+      })();
+    <\/script>`;
+  } else if (q.type === 'missing') {
+    html += `<div style="display:flex; gap:6px; justify-content:center; align-items:center; margin-bottom:14px; flex-wrap:wrap;">`;
+    q.seq.forEach(n => {
+      if (n === '?') {
+        html += `<div style="width:55px; height:55px; background:#FFF3E0; border:2px dashed #FF9F43; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:24px; color:#FF9F43; font-weight:700;">?</div>`;
+      } else {
+        html += `<div style="width:55px; height:55px; background:#E3F2FD; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:700; color:#1565C0;">${n}</div>`;
+      }
+    });
+    html += `</div>`;
+    html += `<div style="display:grid; grid-template-columns:repeat(4,1fr); gap:8px;">`;
+    q.options.forEach(opt => {
+      html += `<button onclick="checkNSAnswer(${opt}, ${q.answer})" style="padding:14px; font-size:20px; font-weight:700; border:2px solid #4ECDC4; border-radius:12px; background:#fff; color:#1565C0; cursor:pointer;">${opt}</button>`;
+    });
+    html += `</div>`;
+  }
+  
+  area.innerHTML = html;
+}
+
+// 检查数字答案
+function checkNSAnswer(picked, answer) {
+  const scoreEl = document.getElementById('ns-score');
+  if (picked === answer) {
+    nsCorrect++;
+    showToast('✅ 答对了！真棒！');
+    if (scoreEl) scoreEl.textContent = `✅ ${nsCorrect}/${nsQuestions.length}`;
+  } else {
+    showToast(`❌ 再想想，正确答案是 ${answer}`);
+  }
+  nsCurrentIdx++;
+  setTimeout(renderNSQuestion, 800);
+}
+
+// 检查文字答案（相邻数）
+function checkNSAnswerStr(picked, answer) {
+  const scoreEl = document.getElementById('ns-score');
+  if (picked === answer) {
+    nsCorrect++;
+    showToast('✅ 答对了！真棒！');
+    if (scoreEl) scoreEl.textContent = `✅ ${nsCorrect}/${nsQuestions.length}`;
+  } else {
+    showToast(`❌ 再想想，正确答案是 ${answer}`);
+  }
+  nsCurrentIdx++;
+  setTimeout(renderNSQuestion, 800);
+}
+
+// 排序题：从格子移除
+function nsRemoveFromSlot(idx) {
+  const slot = document.getElementById('ns-slot-' + idx);
+  if (!slot) return;
+  const val = slot.getAttribute('data-val');
+  if (val) {
+    // 恢复可选状态
+    document.querySelectorAll('.ns-drag-item').forEach(item => {
+      if (item.getAttribute('data-val') === val) {
+        item.style.opacity = '1';
+        item.style.pointerEvents = 'auto';
+      }
+    });
+    slot.textContent = '';
+    slot.removeAttribute('data-val');
+    slot.style.color = '#999';
+    slot.style.background = '#FFF8E1';
+    slot.style.border = '2px dashed #FFB74D';
+  }
+}
+
+// 检查排序答案
+function checkNSOrder() {
+  let result = '';
+  for (let i = 0; i < 4; i++) {
+    const slot = document.getElementById('ns-slot-' + i);
+    const val = slot ? slot.getAttribute('data-val') : null;
+    if (!val) {
+      showToast('请把4个数字都排好再确认！');
+      return;
+    }
+    result += (i > 0 ? ' < ' : '') + val;
+  }
+  const q = nsQuestions[nsCurrentIdx];
+  const scoreEl = document.getElementById('ns-score');
+  if (result === q.answer) {
+    nsCorrect++;
+    showToast('✅ 排对了！真厉害！');
+    if (scoreEl) scoreEl.textContent = `✅ ${nsCorrect}/${nsQuestions.length}`;
+  } else {
+    showToast(`❌ 正确顺序是 ${q.answer}`);
+  }
+  nsCurrentIdx++;
+  setTimeout(renderNSQuestion, 1200);
 }
 
 function renderThinking() {
